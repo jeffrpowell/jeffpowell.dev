@@ -7,48 +7,55 @@
 }
 
 .grid-row {
-  display: block;
   margin-bottom: 0.1rem;
+  line-height: 1.5rem;
+}
+
+.tangram {
+  margin-bottom: 0;
+  font-size: 1.5rem;
+  display: inline;
 }
 
 /* Colorize tangram pieces */
+.tangram-piece-0 {
+    background-color: rgb(172, 55, 55);
+}
+
 .tangram-piece-1 {
-  color: #e63946; /* Red */
-  font-weight: bold;
+    background-color: rgb(223, 124, 44);
 }
 
 .tangram-piece-2 {
-  color: #f77f00; /* Orange */
-  font-weight: bold;
+    background-color: rgb(209, 189, 9);
 }
 
 .tangram-piece-3 {
-  color: #fcbf49; /* Yellow */
-  font-weight: bold;
+    background-color: rgb(15, 77, 15);
 }
 
 .tangram-piece-4 {
-  color: #2a9d8f; /* Teal */
-  font-weight: bold;
+    background-color: rgb(15, 158, 146);
 }
 
 .tangram-piece-5 {
-  color: #457b9d; /* Blue */
-  font-weight: bold;
+    background-color: rgb(56, 79, 184);
 }
 
 .tangram-piece-6 {
-  color: #5e60ce; /* Purple */
-  font-weight: bold;
+    background-color: rgb(99, 17, 131);
 }
 
 .tangram-piece-7 {
-  color: #8338ec; /* Violet */
-  font-weight: bold;
+    background-color: rgb(168, 17, 136);
 }
 
-.tangram-empty {
-  color: #adb5bd; /* Light gray */
+.tangram-piece-8 {
+    background-color: rgb(100, 61, 9);
+}
+
+.tangram-piece-9 {
+    background-color: rgb(55, 59, 66);
 }
 
 /* Add some space around the grid */

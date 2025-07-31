@@ -1,4 +1,6 @@
-require('../../index')
+// Tech page functionality
+import { initPage } from '../shared/shared';
+import './tech.css'
 import * as d3 from 'd3';
 
 // Define the tech data structure
@@ -232,8 +234,7 @@ function initSearch() {
 
 // Initialize the bubble chart when the page loads
 window.addEventListener('page:tech:loaded', () => {
-  initBubbleChart();
-  initSearch();
+
 });
 
 function initBubbleChart() {
@@ -382,3 +383,10 @@ function initBubbleChart() {
     `;
   }
 }
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', () => {
+  initPage();
+  initBubbleChart();
+  initSearch();
+});

@@ -1,42 +1,95 @@
-<div class="max-w-5xl mx-auto">
-  <h1 class="text-3xl font-bold text-gray-800 mb-6">Tangram Calendar</h1>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Tangram - Jeff Powell</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <div class="text-lg mb-4">
-    <span id="tangram-date" class="font-semibold"></span>
-  </div>
+  <!-- https://realfavicongenerator.net -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="manifest" href="assets/site.webmanifest">
+  <link rel="mask-icon" href="assets/safari-pinned-tab.svg" color="#709f4f">
+  <link rel="shortcut icon" href="assets/favicon.ico">
+  <meta name="msapplication-config" content="assets/browserconfig.xml">
   
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <!-- Hint Section -->
-    <section class="bg-white shadow-md-full rounded-lg p-6">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Hint</h2>
-      <div id="tangram-hint" class="font-mono text-lg tangram-grid">
-        <!-- Hint will be loaded here -->
-        <div class="flex items-center justify-center h-32">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-700"></div>
+  <!-- Material Design Icons for navigation -->
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
+  
+  <!-- Shared CSS with Tailwind and View Transitions -->
+  <link rel="stylesheet" href="tangram.css">
+  <script type="text/javascript" src="/vendors.js"></script>
+</head>
+<body class="bg-background font-default leading-6">
+  <!-- Mobile header loaded via HTMX -->
+  <div hx-get="/htmx/mobile-header.html" hx-trigger="load" hx-swap="outerHTML"></div>
+
+  <div class="h-screen pt-16 md:pt-0"> <!-- Add padding top for mobile header -->
+    <div class="flex h-full">
+      <!-- Desktop sidebar loaded via HTMX -->
+      <div hx-get="/htmx/desktop-sidebar.html" hx-trigger="load" hx-swap="outerHTML"></div>
+
+      <!-- Mobile bottom navigation loaded via HTMX -->
+      <div hx-get="/htmx/mobile-bottom-nav.html" hx-trigger="load" hx-swap="outerHTML"></div>
+
+      <!-- Main content -->
+      <div class="flex-1 md:ml-1/5 lg:ml-1/6 p-6 pb-20 md:pb-6 overflow-y-auto">
+        <div class="max-w-5xl mx-auto">
+          <h1 class="text-3xl font-bold text-gray-800 mb-6">Tangram Calendar</h1>
+          
+          <div class="text-lg mb-4">
+            <span id="tangram-date" class="font-semibold"></span>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Hint Section -->
+            <section class="bg-white shadow-md-full rounded-lg p-6">
+              <h2 class="text-2xl font-semibold text-gray-800 mb-4">Hint</h2>
+              <div id="tangram-hint" class="font-mono text-lg tangram-grid">
+                <!-- Hint will be loaded here -->
+                <div class="flex items-center justify-center h-32">
+                  <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-700"></div>
+                </div>
+              </div>
+            </section>
+            
+            <!-- Solution Section -->
+            <section class="bg-white shadow-md-full rounded-lg p-6">
+              <h2 class="text-2xl font-semibold text-gray-800 mb-4">Solution</h2>
+              <div id="tangram-solution" class="font-mono text-lg tangram-grid hidden">
+                <!-- Solution will be loaded here -->
+              </div>
+              <button 
+                id="show-solution-btn"
+                class="mt-4 px-4 py-2 bg-green-600 text-white rounded-sm hover:bg-green-700 transition-colors">
+                Click to reveal a solution
+              </button>
+            </section>
+          </div>
+          
+          <div class="mt-6 bg-white shadow-md-full rounded-lg p-6">
+            <h3 class="text-xl font-semibold mb-3">About Tangram Calendar</h3>
+            <p class="text-gray-700">
+              The Tangram Calendar shows a daily tangram puzzle. The hint gives you the shape to create,
+              and the solution shows one possible arrangement of the seven standard tangram pieces.
+              The tangram is represented using ASCII characters, with each piece having its own color.
+            </p>
+          </div>
         </div>
       </div>
-    </section>
-    
-    <!-- Solution Section -->
-    <section class="bg-white shadow-md-full rounded-lg p-6">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Solution</h2>
-      <div id="tangram-solution" class="font-mono text-lg tangram-grid hidden">
-        <!-- Solution will be loaded here -->
-      </div>
-      <button 
-        id="show-solution-btn"
-        class="mt-4 px-4 py-2 bg-green-600 text-white rounded-sm hover:bg-green-700 transition-colors">
-        Click to reveal a solution
-      </button>
-    </section>
+    </div>
   </div>
-  
-  <div class="mt-6 bg-white shadow-md-full rounded-lg p-6">
-    <h3 class="text-xl font-semibold mb-3">About Tangram Calendar</h3>
-    <p class="text-gray-700">
-      The Tangram Calendar shows a daily tangram puzzle. The hint gives you the shape to create,
-      and the solution shows one possible arrangement of the seven standard tangram pieces.
-      The tangram is represented using ASCII characters, with each piece having its own color.
-    </p>
-  </div>
-</div>
+
+  <script type="text/javascript" src="tangram.js"></script>
+  <script>
+    // Initialize navigation after HTMX loads components
+    document.addEventListener('htmx:afterSettle', function() {
+      if (window.NavigationUtils) {
+        NavigationUtils.init('tangram');
+      }
+    });
+  </script>
+</body>
+</html>

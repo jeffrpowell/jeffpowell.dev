@@ -1,16 +1,8 @@
-require('../../index')
 // Portfolio page functionality
-// Import necessary assets
-import './portfolio.css';
+import { initPage } from '../shared/shared';
+import './portfolio.css'
 
-// Initialize the page when loaded
-window.addEventListener('page:portfolio:loaded', () => {
-  setupPortfolioInteractions();
-});
-
-/**
- * Setup click handlers for portfolio items
- */
+// Setup portfolio interactions
 function setupPortfolioInteractions() {
   // Setup repository click handlers
   const repoItems = document.querySelectorAll('#repos-container > div[data-url]');
@@ -45,3 +37,9 @@ function setupPortfolioInteractions() {
     });
   });
 }
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', () => {
+  initPage();
+  setupPortfolioInteractions();
+});

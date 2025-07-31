@@ -1,14 +1,9 @@
-require('../../index')
 // Tangram Calendar page functionality
-import './tangram.css';
+import { initPage } from '../shared/shared';
+import './tangram.css'
 
 // Base URL for the tangram API
 const BASE_URL = 'https://tangram-calendar.jeffpowell.dev/';
-
-// Initialize the page when loaded
-window.addEventListener('page:tangram:loaded', () => {
-  initTangramCalendar();
-});
 
 function initTangramCalendar() {
   // Get current date in YYYY-MM-DD format
@@ -102,15 +97,23 @@ function revealSolution() {
 
 // Function to colorize tangram characters
 function colorTangram(text) {
-  // Replace tangram characters with colored spans
+  // Replace tangram characters with colored pre's
   return text
-    .replace(/1/g, '<span class="tangram-piece-1">1</span>')
-    .replace(/2/g, '<span class="tangram-piece-2">2</span>')
-    .replace(/3/g, '<span class="tangram-piece-3">3</span>')
-    .replace(/4/g, '<span class="tangram-piece-4">4</span>')
-    .replace(/5/g, '<span class="tangram-piece-5">5</span>')
-    .replace(/6/g, '<span class="tangram-piece-6">6</span>')
-    .replace(/7/g, '<span class="tangram-piece-7">7</span>')
-    .replace(/\./g, '<span class="tangram-empty">.</span>')
-    .replace(/\s/g, '&nbsp;');
+    .replace(/0/g, '<pre class="tangram tangram-piece-0">  </pre>')
+    .replace(/1/g, '<pre class="tangram tangram-piece-1">  </pre>')
+    .replace(/2/g, '<pre class="tangram tangram-piece-2">  </pre>')
+    .replace(/3/g, '<pre class="tangram tangram-piece-3">  </pre>')
+    .replace(/4/g, '<pre class="tangram tangram-piece-4">  </pre>')
+    .replace(/5/g, '<pre class="tangram tangram-piece-5">  </pre>')
+    .replace(/6/g, '<pre class="tangram tangram-piece-6">  </pre>')
+    .replace(/7/g, '<pre class="tangram tangram-piece-7">  </pre>')
+    .replace(/8/g, '<pre class="tangram tangram-piece-8">  </pre>')
+    .replace(/9/g, '<pre class="tangram tangram-piece-9">  </pre>')
+    .replace(/\./g, '<pre class="tangram tangram-empty">  </pre>');
 }
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', () => {
+  initPage();
+  initTangramCalendar();
+});
