@@ -1,5 +1,5 @@
 // Tangram Calendar page functionality
-import { initPage } from '../shared/shared';
+import '../../navigation';
 import './tangram.css'
 
 // Base URL for the tangram API
@@ -114,6 +114,6 @@ function colorTangram(text) {
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
-  initPage();
+  window.NavigationUtils.init('tangram');
   initTangramCalendar();
 });

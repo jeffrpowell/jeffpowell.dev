@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Jeff Powell</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- https://realfavicongenerator.net -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="manifest" href="assets/site.webmanifest">
+  <link rel="mask-icon" href="assets/safari-pinned-tab.svg" color="#709f4f">
+  <link rel="shortcut icon" href="assets/favicon.ico">
+  <meta name="msapplication-config" content="assets/browserconfig.xml">
+
+  <!-- Supporting CSS and Javascript -->
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/index.css">
+  <script type="text/javascript" src="/vendors.js"></script>
+</head>
+<body class="bg-background font-default leading-6">
+  <!-- Mobile top header - only visible on mobile -->
+  <div id="mobile-brand" class="md:hidden fixed top-0 left-0 right-0 z-10 bg-white shadow-sm flex items-center h-16">
+    <a href="/" class="ml-4">
+      <img src="assets/android-chrome-192x192.png" alt="Logo" class="h-10 w-10">
+    </a>
+    <div class="text-center flex justify-center w-full h-full items-center">
+      <span id="current-route-name" class="text-xl font-semibold text-gray-800">About Me</span>
+    </div>
+  </div>
+
+  <div class="h-screen pt-16 md:pt-0"> <!-- Add padding top for mobile header -->
+    <div class="flex h-full">
+      <!-- Desktop Sidebar - hidden on mobile -->
+      <div id="sidebar" style="background: var(--hdr-gradient);" class="hidden md:flex flex-col w-1/5 lg:w-1/6 shadow-md-full h-full fixed">
+        <div class="navbar-brand w-full text-center py-4">
+          <a href="/">
+            <img src="assets/android-chrome-192x192.png" alt="Logo" class="h-36 w-36 mx-auto">
+          </a>
+        </div>
+        <hr class="w-full border-gray-600/60">
+        <ul id="nav" class="nav flex-col text-center py-6">
+          <li hx-get="/about-me.html" hx-swap="innerHTML" hx-target="#content" hx-trigger="click" data-page="about-me" class="w-full py-2 hover:bg-green-50 hover:text-green-600 cursor-pointer">About Me</li>
+          <li hx-get="/portfolio.html" hx-swap="innerHTML" hx-target="#content" hx-trigger="click" data-page="portfolio" class="w-full py-2 hover:bg-green-50 hover:text-green-600 cursor-pointer">Portfolio</li>
+          <li hx-get="/tech.html" hx-swap="innerHTML" hx-target="#content" hx-trigger="click" data-page="tech" class="w-full py-2 hover:bg-green-50 hover:text-green-600 cursor-pointer">Known Tech</li>
+          <li hx-get="/tangram.html" hx-swap="innerHTML" hx-target="#content" hx-trigger="click" data-page="tangram" class="w-full py-2 hover:bg-green-50 hover:text-green-600 cursor-pointer">Tangram Calendar</li>
+        </ul>
+        <div id="footer" class="w-full mt-auto mb-4">
+          <hr class="w-full border-gray-600/60 mb-4">
+          <div class="social-icons flex justify-around px-4">
+            <a target="_blank" href="https://www.linkedin.com/in/jeffpowell-dev/" class="text-xl hover:text-green-600"><i class="mdi mdi-linkedin"></i></a>
+            <a target="_blank" href="https://github.com/jeffrpowell" class="text-xl hover:text-green-600"><i class="mdi mdi-github"></i></a>
+            <a target="_blank" href="https://discord.gg/aWy5F3ED9Y" class="text-xl hover:text-green-600"><i class="mdi mdi-discord"></i></a>
+            <a target="_blank" href="mailto:hi@jeffpowell.dev" class="text-xl hover:text-green-600"><i class="mdi mdi-email-outline"></i></a>
+          </div>
+          <div class="flex flex-col items-center mt-2">
+            <small>&copy; <span id="current-year"></span> - Jeff Powell</small>
+            <small>All Rights Reserved</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content - with margin for sidebar on desktop -->
+      <div id="component-wrapper" class="w-full md:ml-1/5 lg:ml-1/6 md:pl-[20%] lg:pl-[16.6667%] h-full pb-16 md:pb-0"> <!-- Add padding bottom for mobile nav -->
+        <main id="content" hx-trigger="load" hx-get="about-me.html" class="container mx-auto px-4 py-8">
+          <!-- Page content will be loaded here -->
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile bottom navigation - only visible on mobile -->
+  <ul id="mobile-nav" class="md:hidden flex justify-around items-end fixed bottom-0 left-0 right-0 z-10 bg-white shadow-inner text-xs uppercase h-14">
+    <li class="flex-1 p-1">
+      <a class="flex flex-col items-center justify-center h-full" href="/whois.html">
+        <i class="mdi mdi-home-outline text-xl"></i>
+        <span class="mobile-nav-text">About</span>
+      </a>
+    </li>
+    <li class="flex-1 p-1">
+      <a class="flex flex-col items-center justify-center h-full" href="/portfolio.html">
+        <i class="mdi mdi-book-open-page-variant-outline text-xl"></i>
+        <span class="mobile-nav-text">Portfolio</span>
+      </a>
+    </li>
+    <li class="flex-1 p-1">
+      <a class="flex flex-col items-center justify-center h-full" href="/tech.html">
+        <i class="mdi mdi-account-star-outline text-xl"></i>
+        <span class="mobile-nav-text">Tech</span>
+      </a>
+    </li>
+    <li class="flex-1 p-1">
+      <a class="flex flex-col items-center justify-center h-full" href="/tangram.html">
+        <i class="mdi mdi-tangram text-xl"></i>
+        <span class="mobile-nav-text">Tangram</span>
+      </a>
+    </li>
+  </ul>
+  <script type="text/javascript" src="/index.js"></script>
+</body>
+</html>

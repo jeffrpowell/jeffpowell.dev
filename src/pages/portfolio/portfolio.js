@@ -1,5 +1,5 @@
 // Portfolio page functionality
-import { initPage } from '../shared/shared';
+import '../../navigation';
 import './portfolio.css'
 
 // Setup portfolio interactions
@@ -40,6 +40,6 @@ function setupPortfolioInteractions() {
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
-  initPage();
+  window.NavigationUtils.init('portfolio');
   setupPortfolioInteractions();
 });

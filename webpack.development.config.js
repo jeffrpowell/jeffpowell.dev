@@ -5,11 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   mode: 'development',
   entry: {
-    // 'shared': './src/pages/shared/shared.js',
-    'about-me': './src/pages/about-me/about-me.js',
-    'portfolio': './src/pages/portfolio/portfolio.js',
-    'tech': './src/pages/tech/tech.js',
-    'tangram': './src/pages/tangram/tangram.js'
+    'index': './src/index.js'
   },
   output: {
     filename: '[name].js',
@@ -59,13 +55,12 @@ module.exports = {
     // Copy standalone HTML files for MPA
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'src/pages/shared/index.html', to: 'index.html' },
+        { from: 'src/index.html', to: 'index.html' },
         { from: 'src/pages/about-me/about-me.html', to: 'about-me.html' },
         { from: 'src/pages/portfolio/portfolio.html', to: 'portfolio.html' },
         { from: 'src/pages/tech/tech.html', to: 'tech.html' },
         { from: 'src/pages/tangram/tangram.html', to: 'tangram.html' },
         { from: 'src/assets', to: 'assets' },
-        { from: 'src/pages/shared/htmx', to: 'htmx' },
         { from: 'CNAME', to: '' },
       ],
     }),

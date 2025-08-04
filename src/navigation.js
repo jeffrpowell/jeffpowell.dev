@@ -12,7 +12,6 @@ window.NavigationUtils = {
   init: function(currentPage) {
     this.setActiveNavigation(currentPage);
     this.setPageTitle(currentPage);
-    this.setCurrentYear();
   },
 
   // Set active state for navigation links
@@ -50,12 +49,4 @@ window.NavigationUtils = {
       titleElement.textContent = this.pageTitles[currentPage];
     }
   },
-
-  // Set current year in footer
-  setCurrentYear: function() {
-    const yearElement = document.getElementById('current-year');
-    if (yearElement) {
-      yearElement.textContent = new Date().getFullYear();
-    }
-  }
 };

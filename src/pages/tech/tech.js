@@ -1,7 +1,8 @@
 // Tech page functionality
-import { initPage } from '../shared/shared';
+import '../../navigation';
 import './tech.css'
 import * as d3 from 'd3';
+import { PageInterface } from '../page';
 
 // Define the tech data structure
 const KNOWN_TECH = {
@@ -170,223 +171,231 @@ const COLORS = {
   'dark-border': '#3f6212' // Dark green border
 };
 
-// Global object to store zoom functions for search
-const valueToZoomFunctions = {};
+export class KnownTechPage extends PageInterface {
+  constructor() {
+    super();
+    // Global object to store zoom functions for search
+    this.valueToZoomFunctions = {};
+    this.searchHandler = null;
+  }
 
-// Search functionality
-function initSearch() {
-  const searchInput = document.getElementById('tech-search');
-  const searchResults = document.getElementById('search-results');
+  init () {
+    this.initBubbleChart();
+    this.initSearch();
+  }
   
-  // Get all tech items for search
-  const allTechItems = Object.keys(valueToZoomFunctions);
-  
-  // Handle input in search box
-  searchInput.addEventListener('input', function() {
-    const term = this.value.toLowerCase();
-    
-    if (term.length < 2) {
-      searchResults.classList.add('hidden');
-      return;
-    }
-    
-    const filteredItems = allTechItems
-      .filter(item => item.toLowerCase().includes(term))
-      .slice(0, 10);
-    
-    if (filteredItems.length > 0) {
-      searchResults.innerHTML = '';
+  destroy () {
+
+  }
+
+  initSearchHandler() {
+    this.searchHandler = function() {
+      const term = this.value.toLowerCase();
       
-      filteredItems.forEach(item => {
-        const resultItem = document.createElement('div');
-        resultItem.className = 'px-4 py-2 hover:bg-gray-100 cursor-pointer';
-        resultItem.textContent = item.charAt(0).toUpperCase() + item.slice(1);
+      if (term.length < 2) {
+        searchResults.classList.add('hidden');
+        return;
+      }
+      
+      const filteredItems = allTechItems
+        .filter(item => item.toLowerCase().includes(term))
+        .slice(0, 10);
+      
+      if (filteredItems.length > 0) {
+        searchResults.innerHTML = '';
         
-        resultItem.addEventListener('click', () => {
-          searchInput.value = item;
-          searchResults.classList.add('hidden');
-          valueToZoomFunctions[item.toLowerCase()]();
+        filteredItems.forEach(item => {
+          const resultItem = document.createElement('div');
+          resultItem.className = 'px-4 py-2 hover:bg-gray-100 cursor-pointer';
+          resultItem.textContent = item.charAt(0).toUpperCase() + item.slice(1);
+          
+          resultItem.addEventListener('click', () => {
+            searchInput.value = item;
+            searchResults.classList.add('hidden');
+            this.valueToZoomFunctions[item.toLowerCase()]();
+          });
+          
+          searchResults.appendChild(resultItem);
         });
         
-        searchResults.appendChild(resultItem);
-      });
-      
-      searchResults.classList.remove('hidden');
-    } else {
-      searchResults.classList.add('hidden');
-    }
-  });
-  
-  // Hide search results when clicking outside
-  document.addEventListener('click', function(event) {
-    if (event.target !== searchInput && event.target !== searchResults) {
-      searchResults.classList.add('hidden');
-    }
-  });
-  
-  // Show search results when focusing on search input
-  searchInput.addEventListener('focus', function() {
-    if (this.value.length >= 2) {
-      searchResults.classList.remove('hidden');
-    }
-  });
-}
+        searchResults.classList.remove('hidden');
+      } else {
+        searchResults.classList.add('hidden');
+      }
+    };
+  }
 
-// Initialize the bubble chart when the page loads
-window.addEventListener('page:tech:loaded', () => {
-
-});
-
-function initBubbleChart() {
-  const width = document.getElementById('bubble-chart-container').offsetWidth - 40;
-  const height = 500;
-  
-  const svg = d3.select('#techBubbleChartSVG')
-    .attr('preserveAspectRatio', 'xMidYMid meet')
-    .attr('viewBox', `0, 0, ${width}, ${height}`)
-    .on('click', zoomToFullView);
-
-  // Create the hierarchical data structure
-  const root = d3.hierarchy(KNOWN_TECH)
-    .sum(d => d.value)
-    .sort((a, b) => b.value - a.value);
-
-  // Create the pack layout
-  const pack = d3.pack()
-    .size([width, height])
-    .padding(3);
-
-  // Apply the layout to the data
-  const rootNode = pack(root);
-  
-  // Constants for zooming
-  let currentNode = rootNode;
-  let currentTransform = [rootNode.x, rootNode.y, rootNode.r * 2 + 1];
-  
-  // Create circle elements
-  const circleGroup = svg.append('g');
-  
-  const circles = circleGroup
-    .selectAll('circle')
-    .data(rootNode.descendants().slice(1))
-    .join('circle')
-    .attr('cx', d => d.x)
-    .attr('cy', d => d.y)
-    .attr('r', d => d.r)
-    .attr('fill', d => (d.children ? COLORS.medium : COLORS.light))
-    .attr('pointer-events', d => (!d.children ? 'none' : null))
-    .on('mouseover', function() {
-      d3.select(this).attr('stroke', COLORS['dark-border']);
-    })
-    .on('mouseout', function() {
-      d3.select(this).attr('stroke', null);
-    })
-    .on('click', function(event, d) {
-      event.stopPropagation();
-      d3.select(this).attr('stroke', null);
-      zoomToCircleCenter(d);
+  // Search functionality
+  initSearch() {
+    const searchInput = document.getElementById('tech-search');
+    const searchResults = document.getElementById('search-results');
+    
+    // Get all tech items for search
+    const allTechItems = Object.keys(valueToZoomFunctions);
+    
+    // Handle input in search box
+    this.initSearchHandler();
+    searchInput.addEventListener('input', this.searchHandler);
+    
+    // Hide search results when clicking outside
+    document.addEventListener('click', function(event) {
+      if (event.target !== searchInput && event.target !== searchResults) {
+        searchResults.classList.add('hidden');
+      }
     });
-  
-  // Create leaf node id to zoom function mapping for search
-  rootNode.descendants().filter(d => !d.children).forEach(d => {
-    valueToZoomFunctions[d.data.name.toLowerCase()] = () => zoomToCircleCenter(d.parent);
-  });
-  
-  // Create text labels
-  const labelGroup = svg.append('g')
-    .attr('pointer-events', 'none')
-    .attr('text-anchor', 'middle');
-  
-  const labels = labelGroup
-    .selectAll('text')
-    .data(rootNode.descendants())
-    .join('text')
-    .style('fill-opacity', d => (d.parent === currentNode ? 1 : 0))
-    .style('display', d => (d.parent === currentNode ? 'inline' : 'none'))
-    .style('font-size', d => Math.max(0.35, 1 / (2 * (d.depth || 1))) + 'rem')
-    .attr('x', d => d.x)
-    .attr('y', d => d.y)
-    .html(d => generateLabelSVGText(d.data.name, d.x));
-  
-  // Make category labels bold
-  labels.filter(d => d.parent === rootNode).style('font-weight', 'bold');
-  
-  // Generate multi-line text labels
-  function generateLabelSVGText(rawLabel, x) {
-    if (rawLabel.indexOf(' ') < 0) {
-      return rawLabel;
-    }
     
-    const words = rawLabel.split(' ');
-    
-    let finalString = `<tspan x="${x}" dy="-0.5em">${words[0]}</tspan>`;
-    
-    for (let i = 1; i < words.length; i++) {
-      finalString += `<tspan x="${x}" dy="1.25em">${words[i]}</tspan>`;
-    }
-    
-    return finalString;
+    // Show search results when focusing on search input
+    searchInput.addEventListener('focus', function() {
+      if (this.value.length >= 2) {
+        searchResults.classList.remove('hidden');
+      }
+    });
   }
-  
-  // Zoom to a specific circle
-  function zoomToCircleCenter(d) {
-    currentNode = d;
-    const interpolator = d3.interpolateZoom(
-      currentTransform,
-      [d.x, d.y, d.r * 2 + 1]
-    );
+
+  initBubbleChart() {
+    const width = document.getElementById('bubble-chart-container').offsetWidth - 40;
+    const height = 500;
     
-    runTransition(interpolator);
-  }
-  
-  // Zoom back to full view
-  function zoomToFullView() {
-    currentNode = rootNode;
-    const interpolator = d3.interpolateZoom(
-      currentTransform,
-      [rootNode.x, rootNode.y, rootNode.r * 2 + 1]
-    );
+    const svg = d3.select('#techBubbleChartSVG')
+      .attr('preserveAspectRatio', 'xMidYMid meet')
+      .attr('viewBox', `0, 0, ${width}, ${height}`)
+      .on('click', zoomToFullView);
+
+    // Create the hierarchical data structure
+    const root = d3.hierarchy(KNOWN_TECH)
+      .sum(d => d.value)
+      .sort((a, b) => b.value - a.value);
+
+    // Create the pack layout
+    const pack = d3.pack()
+      .size([width, height])
+      .padding(3);
+
+    // Apply the layout to the data
+    const rootNode = pack(root);
     
-    runTransition(interpolator);
-  }
-  
-  // Run zoom transition
-  function runTransition(interpolator) {
-    // D3 transition duration
-    const duration = 750;
+    // Constants for zooming
+    let currentNode = rootNode;
+    let currentTransform = [rootNode.x, rootNode.y, rootNode.r * 2 + 1];
     
-    circleGroup
-      .transition()
-      .duration(duration)
-      .attrTween('transform', () => t => transform(currentTransform = interpolator(t)));
-      
-    const labelTransition = labelGroup
-      .transition()
-      .duration(duration)
-      .attrTween('transform', () => t => transform(currentTransform = interpolator(t)));
-      
-    labels
-      .filter(function(d) {
-        return d.parent === currentNode || this.style.display === 'inline';
+    // Create circle elements
+    const circleGroup = svg.append('g');
+    
+    const circles = circleGroup
+      .selectAll('circle')
+      .data(rootNode.descendants().slice(1))
+      .join('circle')
+      .attr('cx', d => d.x)
+      .attr('cy', d => d.y)
+      .attr('r', d => d.r)
+      .attr('fill', d => (d.children ? COLORS.medium : COLORS.light))
+      .attr('pointer-events', d => (!d.children ? 'none' : null))
+      .on('mouseover', function() {
+        d3.select(this).attr('stroke', COLORS['dark-border']);
       })
-      .transition(labelTransition)
+      .on('mouseout', function() {
+        d3.select(this).attr('stroke', null);
+      })
+      .on('click', function(event, d) {
+        event.stopPropagation();
+        d3.select(this).attr('stroke', null);
+        zoomToCircleCenter(d);
+      });
+    
+    // Create leaf node id to zoom function mapping for search
+    rootNode.descendants().filter(d => !d.children).forEach(d => {
+      valueToZoomFunctions[d.data.name.toLowerCase()] = () => zoomToCircleCenter(d.parent);
+    });
+    
+    // Create text labels
+    const labelGroup = svg.append('g')
+      .attr('pointer-events', 'none')
+      .attr('text-anchor', 'middle');
+    
+    const labels = labelGroup
+      .selectAll('text')
+      .data(rootNode.descendants())
+      .join('text')
       .style('fill-opacity', d => (d.parent === currentNode ? 1 : 0))
-      .style('display', d => (d.parent === currentNode ? 'inline' : 'none'));
-  }
-  
-  // Transform function for zoom
-  function transform([x, y, r]) {
-    return `
-      translate(${width / 2}, ${height / 2})
-      scale(${height / r})
-      translate(${-x}, ${-y})
-    `;
+      .style('display', d => (d.parent === currentNode ? 'inline' : 'none'))
+      .style('font-size', d => Math.max(0.35, 1 / (2 * (d.depth || 1))) + 'rem')
+      .attr('x', d => d.x)
+      .attr('y', d => d.y)
+      .html(d => generateLabelSVGText(d.data.name, d.x));
+    
+    // Make category labels bold
+    labels.filter(d => d.parent === rootNode).style('font-weight', 'bold');
+    
+    // Generate multi-line text labels
+    function generateLabelSVGText(rawLabel, x) {
+      if (rawLabel.indexOf(' ') < 0) {
+        return rawLabel;
+      }
+      
+      const words = rawLabel.split(' ');
+      
+      let finalString = `<tspan x="${x}" dy="-0.5em">${words[0]}</tspan>`;
+      
+      for (let i = 1; i < words.length; i++) {
+        finalString += `<tspan x="${x}" dy="1.25em">${words[i]}</tspan>`;
+      }
+      
+      return finalString;
+    }
+    
+    // Zoom to a specific circle
+    function zoomToCircleCenter(d) {
+      currentNode = d;
+      const interpolator = d3.interpolateZoom(
+        currentTransform,
+        [d.x, d.y, d.r * 2 + 1]
+      );
+      
+      runTransition(interpolator);
+    }
+    
+    // Zoom back to full view
+    function zoomToFullView() {
+      currentNode = rootNode;
+      const interpolator = d3.interpolateZoom(
+        currentTransform,
+        [rootNode.x, rootNode.y, rootNode.r * 2 + 1]
+      );
+      
+      runTransition(interpolator);
+    }
+    
+    // Run zoom transition
+    function runTransition(interpolator) {
+      // D3 transition duration
+      const duration = 750;
+      
+      circleGroup
+        .transition()
+        .duration(duration)
+        .attrTween('transform', () => t => transform(currentTransform = interpolator(t)));
+        
+      const labelTransition = labelGroup
+        .transition()
+        .duration(duration)
+        .attrTween('transform', () => t => transform(currentTransform = interpolator(t)));
+        
+      labels
+        .filter(function(d) {
+          return d.parent === currentNode || this.style.display === 'inline';
+        })
+        .transition(labelTransition)
+        .style('fill-opacity', d => (d.parent === currentNode ? 1 : 0))
+        .style('display', d => (d.parent === currentNode ? 'inline' : 'none'));
+    }
+    
+    // Transform function for zoom
+    function transform([x, y, r]) {
+      return `
+        translate(${width / 2}, ${height / 2})
+        scale(${height / r})
+        translate(${-x}, ${-y})
+      `;
+    }
   }
 }
-
-// Initialize the page
-document.addEventListener('DOMContentLoaded', () => {
-  initPage();
-  initBubbleChart();
-  initSearch();
-});
