@@ -1,5 +1,4 @@
 // Tech page functionality
-import '../../navigation';
 import './tech.css'
 import * as d3 from 'd3';
 import { PageInterface } from '../page';
@@ -177,6 +176,13 @@ export class KnownTechPage extends PageInterface {
     // Global object to store zoom functions for search
     this.valueToZoomFunctions = {};
     this.searchHandler = null;
+    this.documentClickHandler = null;
+    this.searchFocusHandler = null;
+    this.svg = null;
+    this.circles = null;
+    this.labelGroup = null;
+    this.labels = null;
+    this.circleGroup = null;
   }
 
   init () {
@@ -185,17 +191,67 @@ export class KnownTechPage extends PageInterface {
   }
   
   destroy () {
-
+    // Clean up search event listeners
+    const searchInput = document.getElementById('tech-search');
+    if (searchInput) {
+      if (this.searchHandler) searchInput.removeEventListener('input', this.searchHandler);
+      if (this.searchFocusHandler) searchInput.removeEventListener('focus', this.searchFocusHandler);
+    }
+    
+    // Clean up document click handler
+    if (this.documentClickHandler) {
+      document.removeEventListener('click', this.documentClickHandler);
+    }
+    
+    // Clean up D3 event handlers
+    if (this.svg) {
+      this.svg.on('click', null); // Remove D3 click handler
+    }
+    
+    if (this.circles) {
+      this.circles
+        .on('mouseover', null)
+        .on('mouseout', null)
+        .on('click', null);
+    }
+    
+    // Remove D3 groups entirely if they exist
+    if (this.circleGroup) {
+      this.circleGroup.selectAll('*').remove();
+    }
+    
+    if (this.labelGroup) {
+      this.labelGroup.selectAll('*').remove();
+    }
+    
+    // Clear stored references
+    this.searchHandler = null;
+    this.documentClickHandler = null;
+    this.searchFocusHandler = null;
+    this.svg = null;
+    this.circles = null;
+    this.circleGroup = null;
+    this.labelGroup = null;
+    this.labels = null;
+    this.valueToZoomFunctions = {};
   }
 
   initSearchHandler() {
+    // Store reference to this for use in closure
+    const self = this;
+    
     this.searchHandler = function() {
+      const searchResults = document.getElementById('search-results');
+      const searchInput = document.getElementById('tech-search');
       const term = this.value.toLowerCase();
       
       if (term.length < 2) {
         searchResults.classList.add('hidden');
         return;
       }
+      
+      // Get tech items from our instance property
+      const allTechItems = Object.keys(self.valueToZoomFunctions);
       
       const filteredItems = allTechItems
         .filter(item => item.toLowerCase().includes(term))
@@ -212,7 +268,7 @@ export class KnownTechPage extends PageInterface {
           resultItem.addEventListener('click', () => {
             searchInput.value = item;
             searchResults.classList.add('hidden');
-            this.valueToZoomFunctions[item.toLowerCase()]();
+            self.valueToZoomFunctions[item.toLowerCase()]();
           });
           
           searchResults.appendChild(resultItem);
@@ -230,33 +286,34 @@ export class KnownTechPage extends PageInterface {
     const searchInput = document.getElementById('tech-search');
     const searchResults = document.getElementById('search-results');
     
-    // Get all tech items for search
-    const allTechItems = Object.keys(valueToZoomFunctions);
-    
     // Handle input in search box
     this.initSearchHandler();
     searchInput.addEventListener('input', this.searchHandler);
     
     // Hide search results when clicking outside
-    document.addEventListener('click', function(event) {
+    this.documentClickHandler = (event) => {
       if (event.target !== searchInput && event.target !== searchResults) {
         searchResults.classList.add('hidden');
       }
-    });
+    };
+    document.addEventListener('click', this.documentClickHandler);
     
     // Show search results when focusing on search input
-    searchInput.addEventListener('focus', function() {
+    this.searchFocusHandler = function() {
       if (this.value.length >= 2) {
         searchResults.classList.remove('hidden');
       }
-    });
+    };
+    searchInput.addEventListener('focus', this.searchFocusHandler);
   }
 
   initBubbleChart() {
+    // Store reference to this for use in nested functions
+    const self = this;
     const width = document.getElementById('bubble-chart-container').offsetWidth - 40;
     const height = 500;
     
-    const svg = d3.select('#techBubbleChartSVG')
+    this.svg = d3.select('#techBubbleChartSVG')
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .attr('viewBox', `0, 0, ${width}, ${height}`)
       .on('click', zoomToFullView);
@@ -279,9 +336,9 @@ export class KnownTechPage extends PageInterface {
     let currentTransform = [rootNode.x, rootNode.y, rootNode.r * 2 + 1];
     
     // Create circle elements
-    const circleGroup = svg.append('g');
+    this.circleGroup = this.svg.append('g');
     
-    const circles = circleGroup
+    this.circles = this.circleGroup
       .selectAll('circle')
       .data(rootNode.descendants().slice(1))
       .join('circle')
@@ -304,15 +361,17 @@ export class KnownTechPage extends PageInterface {
     
     // Create leaf node id to zoom function mapping for search
     rootNode.descendants().filter(d => !d.children).forEach(d => {
-      valueToZoomFunctions[d.data.name.toLowerCase()] = () => zoomToCircleCenter(d.parent);
+      this.valueToZoomFunctions[d.data.name.toLowerCase()] = () => zoomToCircleCenter(d.parent);
     });
     
     // Create text labels
-    const labelGroup = svg.append('g')
+    const labelGroup = this.svg.append('g')
       .attr('pointer-events', 'none')
       .attr('text-anchor', 'middle');
     
-    const labels = labelGroup
+    // Store references for cleanup
+    this.labelGroup = labelGroup;
+    this.labels = labelGroup
       .selectAll('text')
       .data(rootNode.descendants())
       .join('text')
@@ -324,7 +383,7 @@ export class KnownTechPage extends PageInterface {
       .html(d => generateLabelSVGText(d.data.name, d.x));
     
     // Make category labels bold
-    labels.filter(d => d.parent === rootNode).style('font-weight', 'bold');
+    this.labels.filter(d => d.parent === rootNode).style('font-weight', 'bold');
     
     // Generate multi-line text labels
     function generateLabelSVGText(rawLabel, x) {
@@ -345,6 +404,7 @@ export class KnownTechPage extends PageInterface {
     
     // Zoom to a specific circle
     function zoomToCircleCenter(d) {
+      // Use self to access instance methods and properties
       currentNode = d;
       const interpolator = d3.interpolateZoom(
         currentTransform,
@@ -356,6 +416,7 @@ export class KnownTechPage extends PageInterface {
     
     // Zoom back to full view
     function zoomToFullView() {
+      // Use self to access instance methods and properties
       currentNode = rootNode;
       const interpolator = d3.interpolateZoom(
         currentTransform,
@@ -370,17 +431,17 @@ export class KnownTechPage extends PageInterface {
       // D3 transition duration
       const duration = 750;
       
-      circleGroup
+      self.circleGroup
         .transition()
         .duration(duration)
         .attrTween('transform', () => t => transform(currentTransform = interpolator(t)));
         
-      const labelTransition = labelGroup
+      const labelTransition = self.labelGroup
         .transition()
         .duration(duration)
         .attrTween('transform', () => t => transform(currentTransform = interpolator(t)));
         
-      labels
+      self.labels
         .filter(function(d) {
           return d.parent === currentNode || this.style.display === 'inline';
         })

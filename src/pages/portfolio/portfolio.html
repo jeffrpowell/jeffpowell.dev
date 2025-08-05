@@ -3,8 +3,39 @@
   <div class="max-w-6xl mx-auto">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Portfolio</h1>
 
+    <!-- Mobile Table of Contents -->
+    <div class="md:hidden mb-8 bg-white rounded-lg shadow-md p-4">
+      <h2 class="text-lg font-semibold text-gray-800 mb-3">Quick Navigation</h2>
+      <div class="space-y-2">
+        <button 
+          class="toc-link w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-md transition-colors duration-200 flex items-center justify-between"
+          data-target="repositories">
+          <span>Code Repositories</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        <button 
+          class="toc-link w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-md transition-colors duration-200 flex items-center justify-between"
+          data-target="articles">
+          <span>Articles</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        <button 
+          class="toc-link w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-md transition-colors duration-200 flex items-center justify-between"
+          data-target="videos">
+          <span>Videos</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
     <!-- Repositories Section -->
-    <section class="mb-8">
+    <section id="repositories" class="mb-8">
       <h2 class="text-2xl font-semibold text-gray-800 mb-4">Code Repositories</h2>
       <div id="repos-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Portfolio website repository -->
@@ -119,7 +150,7 @@
     </section>
 
     <!-- Articles Section -->
-    <section class="mb-8">
+    <section id="articles" class="mb-8">
       <h2 class="text-2xl font-semibold text-gray-800 mb-4">Articles</h2>
       <div id="articles-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Dev Containers Article -->
@@ -152,7 +183,7 @@
     </section>
 
     <!-- Videos Section -->
-    <section class="mb-8">
+    <section id="videos" class="mb-8">
       <h2 class="text-2xl font-semibold text-gray-800 mb-4">Videos</h2>
       <div id="videos-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Brain Care Video -->
@@ -195,4 +226,3 @@
     </section>
   </div>
 </div>
-<script type="text/javascript" src="/portfolio.js"></script>

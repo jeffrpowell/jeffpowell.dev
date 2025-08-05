@@ -1,13 +1,19 @@
 import 'htmx.org';
 import "./index.css"
 import { AboutMePage } from './pages/about-me/about-me';
+import { PortfolioPage } from './pages/portfolio/portfolio';
+import { KnownTechPage } from './pages/tech/tech';
+import { TangramPage } from './pages/tangram/tangram';
 
 // Recommendation from https://htmx.org/docs/#webpack
 window.htmx = require('htmx.org');
 
 // Page must extend PageInterface
 const pages = {
-  'about-me': new AboutMePage()
+  'about-me': new AboutMePage(),
+  'portfolio': new PortfolioPage(),
+  'tech': new KnownTechPage(),
+  'tangram': new TangramPage(),
 };
 
 let currentPage = null;
