@@ -22,12 +22,15 @@
 </head>
 <body class="bg-background font-default leading-6">
   <!-- Mobile top header - only visible on mobile -->
-  <div id="mobile-brand" class="md:hidden fixed top-0 left-0 right-0 z-10 bg-white shadow-sm flex items-center h-16">
-    <a href="/" class="ml-4">
+  <div id="mobile-brand" style="background: var(--hdr-gradient-horizontal);" class="md:hidden fixed top-0 left-0 right-0 z-10 bg-white shadow-sm flex items-center justify-between h-16 px-4">
+    <a href="/" class="flex-shrink-0">
       <img src="assets/android-chrome-192x192.png" alt="Logo" class="h-10 w-10">
     </a>
-    <div class="text-center flex justify-center w-full h-full items-center">
-      <span id="current-route-name" class="text-xl font-semibold text-gray-800">About Me</span>
+    <div class="social-icons flex gap-4">
+      <a target="_blank" href="https://www.linkedin.com/in/jeffpowell-dev/" class="text-2xl hover:text-green-700"><i class="mdi mdi-linkedin"></i></a>
+      <a target="_blank" href="https://github.com/jeffrpowell" class="text-2xl hover:text-green-700"><i class="mdi mdi-github"></i></a>
+      <a target="_blank" href="https://discord.gg/aWy5F3ED9Y" class="text-2xl hover:text-green-700"><i class="mdi mdi-discord"></i></a>
+      <a target="_blank" href="mailto:hi@jeffpowell.dev" class="text-2xl hover:text-green-700"><i class="mdi mdi-email-outline"></i></a>
     </div>
   </div>
 
@@ -50,10 +53,10 @@
         <div id="footer" class="w-full mt-auto mb-4">
           <hr class="w-full border-gray-600/60 mb-4">
           <div class="social-icons flex justify-around px-4">
-            <a target="_blank" href="https://www.linkedin.com/in/jeffpowell-dev/" class="text-xl hover:text-green-600"><i class="mdi mdi-linkedin"></i></a>
-            <a target="_blank" href="https://github.com/jeffrpowell" class="text-xl hover:text-green-600"><i class="mdi mdi-github"></i></a>
-            <a target="_blank" href="https://discord.gg/aWy5F3ED9Y" class="text-xl hover:text-green-600"><i class="mdi mdi-discord"></i></a>
-            <a target="_blank" href="mailto:hi@jeffpowell.dev" class="text-xl hover:text-green-600"><i class="mdi mdi-email-outline"></i></a>
+            <a target="_blank" href="https://www.linkedin.com/in/jeffpowell-dev/" class="text-2xl hover:text-green-700"><i class="mdi mdi-linkedin"></i></a>
+            <a target="_blank" href="https://github.com/jeffrpowell" class="text-2xl hover:text-green-700"><i class="mdi mdi-github"></i></a>
+            <a target="_blank" href="https://discord.gg/aWy5F3ED9Y" class="text-2xl hover:text-green-700"><i class="mdi mdi-discord"></i></a>
+            <a target="_blank" href="mailto:hi@jeffpowell.dev" class="text-2xl hover:text-green-700"><i class="mdi mdi-email-outline"></i></a>
           </div>
           <div class="flex flex-col items-center mt-2">
             <small>&copy; <span id="current-year"></span> - Jeff Powell</small>
@@ -72,30 +75,30 @@
   </div>
 
   <!-- Mobile bottom navigation - only visible on mobile -->
-  <ul id="mobile-nav" class="md:hidden flex justify-around items-end fixed bottom-0 left-0 right-0 z-10 bg-white shadow-inner text-xs uppercase h-14">
-    <li class="flex-1 p-1">
-      <a class="flex flex-col items-center justify-center h-full" href="/whois.html">
+  <ul id="mobile-nav" style="background: var(--hdr-gradient-horizontal);" class="md:hidden flex justify-around items-end fixed bottom-0 left-0 right-0 z-10 bg-white shadow-inner text-xs uppercase h-14">
+    <li hx-get="/about-me.html" hx-swap="innerHTML" hx-target="#content" hx-trigger="click" data-page="about-me" class="flex-1 p-1 cursor-pointer">
+      <div class="flex flex-col items-center justify-center h-full">
         <i class="mdi mdi-home-outline text-xl"></i>
         <span class="mobile-nav-text">About</span>
-      </a>
+      </div>
     </li>
-    <li class="flex-1 p-1">
-      <a class="flex flex-col items-center justify-center h-full" href="/portfolio.html">
+    <li hx-get="/portfolio.html" hx-swap="innerHTML" hx-target="#content" hx-trigger="click" data-page="portfolio" class="flex-1 p-1 cursor-pointer">
+      <div class="flex flex-col items-center justify-center h-full">
         <i class="mdi mdi-book-open-page-variant-outline text-xl"></i>
         <span class="mobile-nav-text">Portfolio</span>
-      </a>
+      </div>
     </li>
-    <li class="flex-1 p-1">
-      <a class="flex flex-col items-center justify-center h-full" href="/tech.html">
+    <li hx-get="/tech.html" hx-swap="innerHTML" hx-target="#content" hx-trigger="click" data-page="tech" class="flex-1 p-1 cursor-pointer">
+      <div class="flex flex-col items-center justify-center h-full">
         <i class="mdi mdi-account-star-outline text-xl"></i>
         <span class="mobile-nav-text">Tech</span>
-      </a>
+      </div>
     </li>
-    <li class="flex-1 p-1">
-      <a class="flex flex-col items-center justify-center h-full" href="/tangram.html">
+    <li hx-get="/tangram.html" hx-swap="innerHTML" hx-target="#content" hx-trigger="click" data-page="tangram" class="flex-1 p-1 cursor-pointer">
+      <div class="flex flex-col items-center justify-center h-full">
         <i class="mdi mdi-tangram text-xl"></i>
         <span class="mobile-nav-text">Tangram</span>
-      </a>
+      </div>
     </li>
   </ul>
   <script type="text/javascript" src="/index.js"></script>

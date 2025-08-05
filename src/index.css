@@ -36,7 +36,10 @@
     to bottom in oklab,
     var(--color-primary) -9% -9%, 7%, var(--color-midground) 28% 63%, 90%, var(--color-primary) 100%
   );
-  --sdr-gradient: linear-gradient(to bottom, #2f6800 -9% -9%, 7%, #c8e9b5 28% 63%, 90%, #2f6800 100%);
+  --hdr-gradient-horizontal: linear-gradient(
+    to right in oklab,
+    var(--color-primary) -9% -9%, 7%, var(--color-midground) 28% 63%, 90%, var(--color-primary) 100%
+  );
 }
 
 /* Accessibility */
