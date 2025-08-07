@@ -1,29 +1,6 @@
-/* Tech page styles */
+/* Tech page styles
 
-/* Bubble chart styles */
-#bubble-chart-container {
-  width: 100%;
-  min-height: 500px;
-}
-
-/* Search field styles */
-#tech-search {
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-#tech-search:focus {
-  border-color: #84cc16;
-  box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.2);
-}
-
-#search-results {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  max-height: 300px;
-  z-index: 50;
-}
-
-/* D3 specific styles */
+/* D3 SVG element styles - cannot be replaced with TailwindCSS */
 circle {
   cursor: pointer;
   transition: stroke-width 0.1s;

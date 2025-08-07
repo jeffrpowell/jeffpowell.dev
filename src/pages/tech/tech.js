@@ -183,11 +183,13 @@ export class KnownTechPage extends PageInterface {
     this.labelGroup = null;
     this.labels = null;
     this.circleGroup = null;
+    this.resizeHandler = null;
   }
 
   init () {
     this.initBubbleChart();
     this.initSearch();
+    this.initResizeHandler();
   }
   
   destroy () {
@@ -206,6 +208,11 @@ export class KnownTechPage extends PageInterface {
     // Clean up D3 event handlers
     if (this.svg) {
       this.svg.on('click', null); // Remove D3 click handler
+    }
+    
+    // Clean up resize handler
+    if (this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler);
     }
     
     if (this.circles) {
@@ -307,13 +314,51 @@ export class KnownTechPage extends PageInterface {
     searchInput.addEventListener('focus', this.searchFocusHandler);
   }
 
+  initResizeHandler() {
+    let resizeTimeout;
+    this.resizeHandler = () => {
+      // Debounce resize events to improve performance
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        // Clear existing chart
+        if (this.svg) {
+          this.svg.selectAll('*').remove();
+        }
+        // Reinitialize the chart with new dimensions
+        this.initBubbleChart();
+      }, 250);
+    };
+    window.addEventListener('resize', this.resizeHandler);
+  }
+
   initBubbleChart() {
-    // Store reference to this for use in nested functions
-    const self = this;
-    const width = document.getElementById('bubble-chart-container').offsetWidth - 40;
-    const height = 500;
+  // Store reference to this for use in nested functions
+  const self = this;
+  const containerWidth = document.getElementById('bubble-chart-container').offsetWidth - 40;
+  
+  // Responsive dimensions based on screen size
+  const isMobile = window.innerWidth < 768;
+  const isTablet = window.innerWidth < 1024;
+  
+  let width, height;
+  
+  if (isMobile) {
+    // On mobile, use a more square aspect ratio to prevent squishing
+    width = Math.max(320, containerWidth);
+    height = Math.max(400, width * 0.8); // 4:5 aspect ratio
+  } else if (isTablet) {
+    // On tablet, use a balanced aspect ratio
+    width = containerWidth;
+    height = Math.max(450, width * 0.6); // 5:3 aspect ratio
+  } else {
+    // On desktop, use the original wider aspect ratio
+    width = containerWidth;
+    height = 500;
+  }
     
     this.svg = d3.select('#techBubbleChartSVG')
+      .attr('width', width)
+      .attr('height', height)
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .attr('viewBox', `0, 0, ${width}, ${height}`)
       .on('click', zoomToFullView);
