@@ -1,37 +1,15 @@
 <!-- Main content -->
-<div data-page="portfolio" class="flex-1 md:ml-1/5 lg:ml-1/6 p-6 pb-20 md:pb-6 overflow-y-auto">
+<div data-page="portfolio" class="flex-1 md:ml-1/5 lg:ml-1/6 pb-20 md:pb-6 overflow-y-auto">
   <div class="max-w-6xl mx-auto">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Portfolio</h1>
 
     <!-- Mobile Table of Contents -->
-    <div class="md:hidden mb-8 bg-white rounded-lg shadow-md p-4">
-      <h2 class="text-lg font-semibold text-gray-800 mb-3">Quick Navigation</h2>
-      <div class="space-y-2">
-        <button 
-          class="toc-link w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-md transition-colors duration-200 flex items-center justify-between"
-          data-target="repositories">
-          <span>Code Repositories</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-        <button 
-          class="toc-link w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-md transition-colors duration-200 flex items-center justify-between"
-          data-target="articles">
-          <span>Articles</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-        <button 
-          class="toc-link w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-md transition-colors duration-200 flex items-center justify-between"
-          data-target="videos">
-          <span>Videos</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-      </div>
+    <div class="md:hidden mb-8">
+      <button class="toc-link text-blue-600 hover:text-blue-800 underline" data-target="repositories">Code Repositories</button>
+      <span class="mx-2 text-gray-500">|</span>
+      <button class="toc-link text-blue-600 hover:text-blue-800 underline" data-target="articles">Articles</button>
+      <span class="mx-2 text-gray-500">|</span>
+      <button class="toc-link text-blue-600 hover:text-blue-800 underline" data-target="videos">Videos</button>
     </div>
 
     <!-- Repositories Section -->
