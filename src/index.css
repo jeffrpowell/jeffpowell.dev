@@ -1,0 +1,78 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/forms';
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@theme {
+  --font-default: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --color-background: #f3f4f6;
+  --color-midground: oklch(0.9273 0.0686 134.47);
+  --color-primary: oklch(0.4599 0.148 134.47);
+
+  --shadow-md-full: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+/* Custom global styles */
+:root {
+  --hdr-gradient: linear-gradient(
+    to bottom in oklab,
+    var(--color-primary) -9% -9%, 7%, var(--color-midground) 28% 63%, 90%, var(--color-primary) 100%
+  );
+  --hdr-gradient-horizontal: linear-gradient(
+    to right in oklab,
+    var(--color-primary) -9% -9%, 7%, var(--color-midground) 28% 63%, 90%, var(--color-primary) 100%
+  );
+}
+
+/* Accessibility */
+:focus {
+  outline: 3px solid var(--primary-color);
+  /* outline-offset: 2px; */
+}
+
+ /* View Transition API */
+@view-transition {
+  navigation: auto;
+}
+
+/* Basic fade transition */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease;
+}
+
+/* Preserve navigation elements across transitions */
+#sidebar {
+  view-transition-name: sidebar;
+}
+
+#mobile-brand {
+  view-transition-name: mobile-brand;
+}
+
+#nav {
+  view-transition-name: nav;
+}
+
+#mobile-nav {
+  view-transition-name: mobile-nav;
+}

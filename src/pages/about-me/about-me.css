@@ -1,0 +1,34 @@
+/* About Me page styles */
+
+/* Style for links */
+a {
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: #4d7c0f;
+  text-decoration: underline;
+}
+
+/* Add subtle animation to sections on page load */
+section {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+section:nth-child(1) { animation-delay: 0.1s; }
+section:nth-child(2) { animation-delay: 0.2s; }
+section:nth-child(3) { animation-delay: 0.3s; }
+section:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,44 @@
+<!-- Main content -->
+<div data-page="tangram" class="flex-1 md:ml-1/5 lg:ml-1/6 pb-20 md:pb-6 overflow-y-auto">
+  <div class="max-w-5xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Tangram Calendar</h1>
+
+    <div class="text-lg mb-4">
+      <span id="tangram-date" class="font-semibold"></span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Hint Section -->
+      <section class="bg-white shadow-md-full rounded-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Hint</h2>
+        <div id="tangram-hint" class="font-mono text-lg tangram-grid">
+          <!-- Hint will be loaded here -->
+          <div class="flex items-center justify-center h-32">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-700"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Solution Section -->
+      <section class="bg-white shadow-md-full rounded-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Solution</h2>
+        <div id="tangram-solution" class="font-mono text-lg tangram-grid hidden">
+          <!-- Solution will be loaded here -->
+        </div>
+        <button id="show-solution-btn"
+          class="mt-4 px-4 py-2 bg-green-600 text-white rounded-sm hover:bg-green-700 transition-colors">
+          Click to reveal a solution
+        </button>
+      </section>
+    </div>
+
+    <div class="mt-6 bg-white shadow-md-full rounded-lg p-6">
+      <h3 class="text-xl font-semibold mb-3">About Tangram Calendar</h3>
+      <p class="text-gray-700">
+        The Tangram Calendar shows a daily tangram puzzle. The hint gives you the shape to create,
+        and the solution shows one possible arrangement of the seven standard tangram pieces.
+        The tangram is represented using ASCII characters, with each piece having its own color.
+      </p>
+    </div>
+  </div>
+</div>

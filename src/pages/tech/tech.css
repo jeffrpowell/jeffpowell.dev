@@ -1,0 +1,16 @@
+/* Tech page styles
+
+/* D3 SVG element styles - cannot be replaced with TailwindCSS */
+circle {
+  cursor: pointer;
+  transition: stroke-width 0.1s;
+}
+
+circle:hover {
+  stroke-width: 2px;
+}
+
+text {
+  pointer-events: none;
+  font-family: sans-serif;
+}

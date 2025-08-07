@@ -1,0 +1,38 @@
+<!-- Main content -->
+<div data-page="tech" class="flex-1 md:ml-1/5 lg:ml-1/6 pb-20 md:pb-6 overflow-y-auto">
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Known Tech</h1>
+
+    <div class="bg-white shadow-md-full rounded-lg p-6 mb-6">
+      <form class="flex flex-col md:flex-row md:items-center">
+        <label for="tech-search" class="mb-2 md:mb-0 md:mr-2 text-gray-700">Looking for a specific tech?</label>
+        <div class="relative flex-1">
+          <input id="tech-search" type="text"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-lime-500 focus:ring-2 focus:ring-lime-500/20 transition-all duration-300 ease-in-out"
+            placeholder="Search here">
+          <div id="search-results"
+            class="absolute left-0 right-0 bg-white border border-gray-300 rounded-md mt-1 max-h-60 overflow-y-auto hidden z-50 shadow-md-full">
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="bg-white shadow-md-full rounded-lg p-6">
+      <div id="bubble-chart-container" class="w-full min-h-96 flex justify-center items-center md:min-h-96 md:p-0">
+        <svg id="techBubbleChartSVG" class="max-w-full h-auto" width="100%"></svg>
+      </div>
+
+      <div class="mt-4 text-sm text-gray-600">
+        <p>Click on a category to zoom in, click background to zoom out</p>
+        <div class="flex items-center mt-2">
+          <span class="inline-block w-4 h-4 rounded-full mr-2"
+            style="background-color: oklch(0.681 0.148 134.47);"></span>
+          <span>Category</span>
+          <span class="inline-block w-4 h-4 rounded-full mx-2"
+            style="background-color: oklch(0.8976 0.0785 134.47);"></span>
+          <span>Technology</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

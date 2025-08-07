@@ -1,0 +1,206 @@
+<!-- Main content -->
+<div data-page="portfolio" class="flex-1 md:ml-1/5 lg:ml-1/6 pb-20 md:pb-6 overflow-y-auto">
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Portfolio</h1>
+
+    <!-- Mobile Table of Contents -->
+    <div class="md:hidden mb-8">
+      <button class="toc-link text-blue-600 hover:text-blue-800 underline" data-target="repositories">Code Repositories</button>
+      <span class="mx-2 text-gray-500">|</span>
+      <button class="toc-link text-blue-600 hover:text-blue-800 underline" data-target="articles">Articles</button>
+      <span class="mx-2 text-gray-500">|</span>
+      <button class="toc-link text-blue-600 hover:text-blue-800 underline" data-target="videos">Videos</button>
+    </div>
+
+    <!-- Repositories Section -->
+    <section id="repositories" class="mb-8">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Code Repositories</h2>
+      <div id="repos-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Portfolio website repository -->
+        <div
+          class="bg-white shadow-md-full rounded-lg overflow-hidden transition-all hover:scale-105 cursor-pointer"
+          data-url="https://github.com/jeffrpowell/jeffrpowell.github.io">
+          <img src="https://assets.jeffpowell.dev/repo_website.jpg" alt="This portfolio website"
+            class="h-40 object-cover border-b-2 border-gray-200 mx-auto">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">This portfolio website</h3>
+            <p class="text-gray-600 mb-3">This website is published as an open-source project.</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Javascript</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">HTML</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">TailwindCSS</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">GitHub</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">D3.js</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Listaway repository -->
+        <div
+          class="bg-white shadow-md-full rounded-lg overflow-hidden transition-all hover:scale-105 cursor-pointer"
+          data-url="https://github.com/jeffrpowell/listaway">
+          <img src="https://assets.jeffpowell.dev/ListawayWordmarkLight.png" alt="Listaway"
+            class="h-40 object-cover border-b-2 border-gray-200 mx-auto">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Listaway</h3>
+            <p class="text-gray-600 mb-3">Self-hostable list-sharing web application (Amazon Lists alternative)</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Go</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Github Actions</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">HTML</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">TailwindCSS</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Postgres</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Docker</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Doskey utility repository -->
+        <div
+          class="bg-white shadow-md-full rounded-lg overflow-hidden transition-all hover:scale-105 cursor-pointer"
+          data-url="https://github.com/jeffrpowell/doskey">
+          <img src="https://assets.jeffpowell.dev/commandPrompt.png" alt="Doskey utility"
+            class="h-40 object-cover border-b-2 border-gray-200 mx-auto">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Doskey utility</h3>
+            <p class="text-gray-600 mb-3">Replicate .bashrc on Windows Command Prompt</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Command Prompt</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">DOS</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Scripting</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Automation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advent of Code repository -->
+        <div
+          class="bg-white shadow-md-full rounded-lg overflow-hidden transition-all hover:scale-105 cursor-pointer"
+          data-url="https://github.com/jeffrpowell/adventofcode">
+          <img src="https://assets.jeffpowell.dev/aoc.jpg" alt="Advent of Code"
+            class="h-40 object-cover border-b-2 border-gray-200 mx-auto">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Advent of Code</h3>
+            <p class="text-gray-600 mb-3">My Advent of Code solutions</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Java</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Design Patterns</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PDFSplicer repository -->
+        <div
+          class="bg-white shadow-md-full rounded-lg overflow-hidden transition-all hover:scale-105 cursor-pointer"
+          data-url="https://github.com/jeffrpowell/PDFSplicer">
+          <img src="https://assets.jeffpowell.dev/pdf.png" alt="PDFSplicer"
+            class="h-40 object-cover border-b-2 border-gray-200 mx-auto">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">PDFSplicer</h3>
+            <p class="text-gray-600 mb-3">PDF joining and splitting utility</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Java</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Swing</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">PDF</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- DosBackup repository -->
+        <div
+          class="bg-white shadow-md-full rounded-lg overflow-hidden transition-all hover:scale-105 cursor-pointer"
+          data-url="https://github.com/jeffrpowell/dosbackup">
+          <img src="https://assets.jeffpowell.dev/backup.jpg" alt="DosBackup"
+            class="h-40 object-cover border-b-2 border-gray-200 mx-auto">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">DosBackup</h3>
+            <p class="text-gray-600 mb-3">Multi-threaded Windows backup solution</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Java</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Swing</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">Threads</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">SwingWorker</span>
+              <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-sm">ForkJoin</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Articles Section -->
+    <section id="articles" class="mb-8">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Articles</h2>
+      <div id="articles-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Dev Containers Article -->
+        <div
+          class="bg-white shadow-md-full rounded-lg overflow-hidden transition-all hover:scale-105 cursor-pointer"
+          data-url="https://medium.com/@jeffpowell.dev/reproducible-local-development-with-dev-containers-58fa830c6b7f">
+          <div class="p-4">
+            <div class="text-sm text-gray-500 mb-1">Medium.com</div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Reproducible Local Development with Dev Containers</h3>
+            <p class="text-gray-600">Maintaining legacy software is a hefty job, beginning with the chore of getting it
+              up and running locally. This article aims to present an approach to alleviate the challenges associated
+              with onboarding for legacy software maintenance. By capitalizing on a relatively new specification called
+              Development Containers, this solution can reduce the time investment down to an hour or less.</p>
+          </div>
+        </div>
+
+        <!-- Go Web App Article -->
+        <div
+          class="bg-white shadow-md-full rounded-lg overflow-hidden transition-all hover:scale-105 cursor-pointer"
+          data-url="https://medium.com/@jeffpowell.dev/blueprint-for-a-full-stack-go-web-application-9633d25b9e2e">
+          <div class="p-4">
+            <div class="text-sm text-gray-500 mb-1">Medium.com</div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Blueprint for a Full-stack Go Web Application</h3>
+            <p class="text-gray-600">Learn how to build a full-stack Go web app with modern architecture, front-end
+              tools like Tailwind CSS, and Postgres integration. This guide covers setup, key patterns, and practical
+              tips for clean development.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Videos Section -->
+    <section id="videos" class="mb-8">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Videos</h2>
+      <div id="videos-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Brain Care Video -->
+        <div
+          class="bg-white shadow-md-full rounded-lg overflow-hidden transition-all hover:scale-105 cursor-pointer"
+          data-video-id="aev5XvuBE_A">
+          <img src="https://img.youtube.com/vi/aev5XvuBE_A/mqdefault.jpg" alt="Brain Care"
+            class="h-40 object-cover border-b-2 border-gray-200 mx-auto">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Brain Care</h3>
+            <p class="text-gray-600">A 30-minute talk on the importance of caring for your mental health.</p>
+          </div>
+        </div>
+
+        <!-- Team Lead 101 Video -->
+        <div
+          class="bg-white shadow-md-full rounded-lg overflow-hidden transition-all hover:scale-105 cursor-pointer"
+          data-video-id="O-HBghOpLZU">
+          <img src="https://img.youtube.com/vi/O-HBghOpLZU/mqdefault.jpg" alt="Team Lead 101"
+            class="h-40 object-cover border-b-2 border-gray-200 mx-auto">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Team Lead 101</h3>
+            <p class="text-gray-600">A 30-minute talk teaching engineers how to think like a manager.</p>
+          </div>
+        </div>
+
+        <!-- DaVinci Resolve Video -->
+        <div
+          class="bg-white shadow-md-full rounded-lg overflow-hidden transition-all hover:scale-105 cursor-pointer"
+          data-video-id="57X5vd-y114">
+          <img src="https://img.youtube.com/vi/57X5vd-y114/mqdefault.jpg" alt="Video Editing with DaVinci Resolve"
+            class="h-40 object-cover border-b-2 border-gray-200 mx-auto">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Video Editing with DaVinci Resolve</h3>
+            <p class="text-gray-600">A 30-minute talk demonstrating simple video post-production using DaVinci Resolve.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
