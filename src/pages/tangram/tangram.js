@@ -1,6 +1,7 @@
 // Tangram Calendar page functionality
 import './tangram.css';
 import { PageInterface } from '../page';
+import { InteractiveTangramPuzzle } from './tangramgame';
 
 // Base URL for the tangram API
 const BASE_URL = 'https://tangram-calendar.jeffpowell.dev/';
@@ -9,14 +10,18 @@ export class TangramPage extends PageInterface {
   constructor() {
     super();
     this.solutionData = null;
+    this.interactivePuzzle = null;
   }
 
   init() {
     this.initTangramCalendar();
+    this.initInteractivePuzzle();
   }
 
   destroy() {
-    // Cleanup if needed when navigating away from the page
+    if (this.interactivePuzzle) {
+      this.interactivePuzzle.destroy();
+    }
   }
 
   initTangramCalendar() {
@@ -25,17 +30,18 @@ export class TangramPage extends PageInterface {
     const targetDate = new Date(localDate.getFullYear(), localDate.getMonth(), localDate.getDate());
     const targetDateStr = this.dateToString(targetDate);
     
-    // Display the date
-    document.getElementById('tangram-date').textContent = `for ${targetDateStr}`;
-    
-    // Load hint
+    // Load hint (but keep it hidden)
     this.fetchTangramData(`${BASE_URL}hint/${targetDateStr}`)
       .then(data => {
         this.renderTangramGrid('tangram-hint', data);
+        // Ensure hint stays hidden after rendering
+        document.getElementById('tangram-hint').classList.add('hidden');
       })
       .catch(error => {
-        document.getElementById('tangram-hint').innerHTML = 
-          `<div class="text-red-600">Error loading hint: ${error.message}</div>`;
+        const hintDiv = document.getElementById('tangram-hint');
+        hintDiv.innerHTML = `<div class="text-red-600">Error loading hint: ${error.message}</div>`;
+        // Ensure hint stays hidden even on error
+        hintDiv.classList.add('hidden');
       });
 
     // Load solution (but don't display it yet)
@@ -48,9 +54,27 @@ export class TangramPage extends PageInterface {
         this.solutionData = [`Error loading solution: ${error.message}`];
       });
 
-    // Set up solution reveal button
+    // Show solution button
     const showSolutionBtn = document.getElementById('show-solution-btn');
-    showSolutionBtn.addEventListener('click', () => this.revealSolution());
+    showSolutionBtn.addEventListener('click', () => {
+      const solutionDiv = document.getElementById('tangram-solution');
+      
+      // Render the solution data if available
+      if (this.solutionData) {
+        this.renderTangramGrid('tangram-solution', this.solutionData);
+      }
+      
+      solutionDiv.classList.remove('hidden');
+      showSolutionBtn.style.display = 'none';
+    });
+
+    // Show hint button
+    const showHintBtn = document.getElementById('show-hint-btn');
+    showHintBtn.addEventListener('click', () => {
+      const hintDiv = document.getElementById('tangram-hint');
+      hintDiv.classList.remove('hidden');
+      showHintBtn.style.display = 'none';
+    });
   }
 
   // Function to fetch tangram data
@@ -125,4 +149,11 @@ export class TangramPage extends PageInterface {
       .replace(/9/g, '<pre class="tangram tangram-piece-9">  </pre>')
       .replace(/\./g, '<pre class="tangram tangram-empty">  </pre>');
   }
+
+  // Initialize interactive puzzle
+  initInteractivePuzzle() {
+    this.interactivePuzzle = new InteractiveTangramPuzzle();
+  }
 }
+
+
