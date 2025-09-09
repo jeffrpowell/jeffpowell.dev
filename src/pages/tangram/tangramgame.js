@@ -39,9 +39,11 @@ export class InteractiveTangramPuzzle {
     this.currentDate = new Date();
     this.dragState = null;
     this.lastPreviewUpdate = 0;
+    this.selectedPiece = null;
     this.initGrid();
     this.initPieces();
     this.render();
+    this.setupMobileControls();
     document.getElementById('reset-puzzle-btn').addEventListener('click', () => this.reset());
   }
 
@@ -178,6 +180,9 @@ export class InteractiveTangramPuzzle {
       if (piece.isPlaced) {
         paletteItem.classList.add('empty');
       }
+      if (this.selectedPiece === piece) {
+        paletteItem.classList.add('selected');
+      }
       const pieceElement = piece.createElement();
       paletteItem.appendChild(pieceElement);
       paletteElement.appendChild(paletteItem);
@@ -202,12 +207,42 @@ export class InteractiveTangramPuzzle {
       }
     };
 
+    const handleTouchStart = (e) => {
+      // Prevent palette scrolling during touch
+      e.preventDefault();
+      
+      // Start drag operation immediately - the threshold logic will handle selection vs drag
+      const startTouch = e.touches[0];
+      const mouseEvent = {
+        clientX: startTouch.clientX,
+        clientY: startTouch.clientY,
+        button: 0,
+        preventDefault: () => e.preventDefault()
+      };
+      this.startDragOperation(piece, mouseEvent, element);
+    };
+
+    // Add click handler for desktop selection
+    const handleClick = (e) => {
+      if (e.detail === 1) { // Single click
+        setTimeout(() => {
+          if (e.detail === 1) { // Still single click after delay
+            this.selectPiece(piece);
+          }
+        }, 200);
+      }
+    };
+
     element.addEventListener('mousedown', handleMouseDown);
+    element.addEventListener('touchstart', handleTouchStart, { passive: false });
+    element.addEventListener('click', handleClick);
     element.addEventListener('contextmenu', (e) => e.preventDefault());
 
     // Store cleanup function for later removal
     element._cleanup = () => {
       element.removeEventListener('mousedown', handleMouseDown);
+      element.removeEventListener('touchstart', handleTouchStart);
+      element.removeEventListener('click', handleClick);
       element.removeEventListener('contextmenu', (e) => e.preventDefault());
     };
 
@@ -457,7 +492,20 @@ export class InteractiveTangramPuzzle {
             }
           };
 
+          const handleGridTouchStart = (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = {
+              clientX: touch.clientX,
+              clientY: touch.clientY,
+              button: 0,
+              preventDefault: () => e.preventDefault()
+            };
+            this.startDragOperation(piece, mouseEvent, null);
+          };
+
           cell.addEventListener('mousedown', handleGridPieceClick);
+          cell.addEventListener('touchstart', handleGridTouchStart, { passive: false });
           cell.addEventListener('contextmenu', (e) => e.preventDefault());
         }
       }
@@ -491,33 +539,64 @@ export class InteractiveTangramPuzzle {
   }
 
   startDragOperation(piece, event, sourceElement) {
-    // If piece is placed on grid, remove it first
-    if (piece.isPlaced) {
-      this.removePieceFromGrid(piece);
-      piece.isPlaced = false;
-      piece.gridX = 0;
-      piece.gridY = 0;
-      this.render();
-    }
-
-    // Create dragging element
+    // Create dragging element but keep it hidden initially
     const dragElement = this.createScaledDragElement(piece);
+    dragElement.style.display = 'none';
     document.body.appendChild(dragElement);
 
+    // Calculate offset based on where the user clicked/touched within the source element
     const { cellWidth, cellHeight } = this.getGridCellDimensions();
-    const startX = cellWidth / 2;
-    const startY = cellHeight / 2;
+    let startX = cellWidth / 2;
+    let startY = cellHeight / 2;
+
+    // If we have a source element (palette item), calculate offset relative to it
+    if (sourceElement) {
+      const sourceRect = sourceElement.getBoundingClientRect();
+      const relativeX = event.clientX - sourceRect.left;
+      const relativeY = event.clientY - sourceRect.top;
+      
+      // Scale the relative position to grid cell size
+      const scaleX = cellWidth / sourceRect.width;
+      const scaleY = cellHeight / sourceRect.height;
+      
+      startX = relativeX * scaleX;
+      startY = relativeY * scaleY;
+    }
 
     dragElement.style.left = (event.clientX - startX) + 'px';
     dragElement.style.top = (event.clientY - startY) + 'px';
 
-    if (sourceElement) {
-      sourceElement.style.opacity = '0.5';
-    }
-
-    let isDragging = true;
+    let isDragging = false;
+    let hasActuallyMoved = false;
+    const startClientX = event.clientX;
+    const startClientY = event.clientY;
+    const dragThreshold = 5; // pixels of movement required to start actual drag
 
     const handleMouseMove = (e) => {
+      const deltaX = Math.abs(e.clientX - startClientX);
+      const deltaY = Math.abs(e.clientY - startClientY);
+      
+      // Check if we've moved enough to start actual dragging
+      if (!hasActuallyMoved && (deltaX > dragThreshold || deltaY > dragThreshold)) {
+        hasActuallyMoved = true;
+        isDragging = true;
+        
+        // Now remove piece from grid if it was placed
+        if (piece.isPlaced) {
+          this.removePieceFromGrid(piece);
+          piece.isPlaced = false;
+          piece.gridX = 0;
+          piece.gridY = 0;
+          this.render();
+        }
+        
+        // Show the drag element and set opacity
+        dragElement.style.display = 'block';
+        if (sourceElement) {
+          sourceElement.style.opacity = '0.5';
+        }
+      }
+      
       if (isDragging && dragElement) {
         dragElement.style.left = (e.clientX - startX) + 'px';
         dragElement.style.top = (e.clientY - startY) + 'px';
@@ -525,32 +604,164 @@ export class InteractiveTangramPuzzle {
       }
     };
 
-    const handleMouseUp = (e) => {
-      if (isDragging) {
-        isDragging = false;
-
-        if (dragElement) {
-          document.body.removeChild(dragElement);
+    const handleTouchMove = (e) => {
+      if (!e.touches || e.touches.length === 0) return;
+      
+      const touch = e.touches[0];
+      const deltaX = Math.abs(touch.clientX - startClientX);
+      const deltaY = Math.abs(touch.clientY - startClientY);
+      
+      // Check if we've moved enough to start actual dragging
+      if (!hasActuallyMoved && (deltaX > dragThreshold || deltaY > dragThreshold)) {
+        hasActuallyMoved = true;
+        isDragging = true;
+        
+        // Now remove piece from grid if it was placed
+        if (piece.isPlaced) {
+          this.removePieceFromGrid(piece);
+          piece.isPlaced = false;
+          piece.gridX = 0;
+          piece.gridY = 0;
+          this.render();
         }
-
-        this.clearDragPreview();
-
+        
+        // Show the drag element and set opacity
+        dragElement.style.display = 'block';
         if (sourceElement) {
-          sourceElement.style.opacity = '1';
+          sourceElement.style.opacity = '0.5';
         }
+        
+        // Update drag element position immediately when dragging starts
+        dragElement.style.left = (touch.clientX - startX) + 'px';
+        dragElement.style.top = (touch.clientY - startY) + 'px';
+      }
+      
+      if (isDragging && dragElement) {
+        e.preventDefault();
+        // Prevent body scrolling during drag
+        document.body.style.overflow = 'hidden';
+        dragElement.style.left = (touch.clientX - startX) + 'px';
+        dragElement.style.top = (touch.clientY - startY) + 'px';
+        this.updateDragPreview(piece, touch.clientX, touch.clientY);
+      }
+    };
 
+    const handleMouseUp = (e) => {
+      // Clean up regardless of whether we actually dragged
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+
+      if (dragElement) {
+        document.body.removeChild(dragElement);
+      }
+
+      // Restore body scrolling
+      document.body.style.overflow = '';
+
+      if (sourceElement) {
+        sourceElement.style.opacity = '1';
+      }
+
+      // Only try to place piece if we actually started dragging
+      if (hasActuallyMoved && isDragging) {
+        isDragging = false;
+        this.clearDragPreview();
         this.tryPlacePiece(piece, e.clientX, e.clientY);
         this.render();
+      } else {
+        // If we didn't actually move, just clear any preview
+        this.clearDragPreview();
+      }
+    };
 
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
+    const handleTouchEnd = (e) => {
+      // Clean up regardless of whether we actually dragged
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+
+      if (dragElement) {
+        document.body.removeChild(dragElement);
+      }
+
+      // Restore body scrolling
+      document.body.style.overflow = '';
+
+      if (sourceElement) {
+        sourceElement.style.opacity = '1';
+      }
+
+      // Only try to place piece if we actually started dragging
+      if (hasActuallyMoved && isDragging) {
+        e.preventDefault();
+        isDragging = false;
+        this.clearDragPreview();
+        
+        // Use the last touch position
+        const touch = e.changedTouches[0];
+        this.tryPlacePiece(piece, touch.clientX, touch.clientY);
+        this.render();
+      } else {
+        // If we didn't actually move, treat it as a selection tap on mobile
+        this.selectPiece(piece);
+        this.clearDragPreview();
       }
     };
 
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd, { passive: false });
 
     event.preventDefault();
+  }
+
+  setupMobileControls() {
+    const rotateBtn = document.getElementById('rotate-btn');
+    const flipBtn = document.getElementById('flip-btn');
+    
+    if (rotateBtn && flipBtn) {
+      rotateBtn.addEventListener('click', () => {
+        if (this.selectedPiece) {
+          this.selectedPiece.rotate();
+          this.render();
+        }
+      });
+      
+      flipBtn.addEventListener('click', () => {
+        if (this.selectedPiece) {
+          this.selectedPiece.flip();
+          this.render();
+        }
+      });
+    }
+  }
+
+  selectPiece(piece) {
+    this.selectedPiece = piece;
+    this.updateMobileControls();
+    this.render();
+  }
+
+  updateMobileControls() {
+    const rotateBtn = document.getElementById('rotate-btn');
+    const flipBtn = document.getElementById('flip-btn');
+    const infoDiv = document.getElementById('selected-piece-info');
+    
+    if (rotateBtn && flipBtn && infoDiv) {
+      if (this.selectedPiece) {
+        rotateBtn.disabled = false;
+        flipBtn.disabled = false;
+        infoDiv.textContent = `You have selected a piece`;
+      } else {
+        rotateBtn.disabled = true;
+        flipBtn.disabled = true;
+        infoDiv.textContent = 'Tap a piece to select it';
+      }
+    }
   }
 
   destroy() {

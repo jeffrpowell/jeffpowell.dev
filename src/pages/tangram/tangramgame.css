@@ -4,12 +4,34 @@
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(8, 1fr);
   gap: 2px;
-  width: 350px;
-  height: 400px;
+  width: min(350px, 90vw);
+  height: calc(min(350px, 90vw) * 8 / 7);
   margin: 0 auto;
   background-color: #e5e7eb;
-  padding: 10px;
+  padding: 8px;
   border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .puzzle-grid {
+    width: min(300px, 90vw);
+    height: calc(min(300px, 90vw) * 8 / 7);
+    padding: 6px;
+    gap: 1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .puzzle-grid {
+    width: min(280px, 95vw);
+    height: calc(min(280px, 95vw) * 8 / 7);
+    padding: 4px;
+  }
+  
+  .piece-palette-item {
+    padding: 4px;
+    min-height: 50px;
+  }
 }
 
 .grid-cell {
@@ -125,13 +147,20 @@
   background-color: white;
   border: 2px solid #e5e7eb;
   border-radius: 6px;
-  padding: 8px;
-  min-height: 80px;
+  padding: 6px;
+  min-height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: border-color 0.2s;
+}
+
+@media (min-width: 1024px) {
+  .piece-palette-item {
+    padding: 8px;
+    min-height: 80px;
+  }
 }
 
 .piece-palette-item:hover {
@@ -141,6 +170,12 @@
 .piece-palette-item.empty {
   border-style: dashed;
   opacity: 0.5;
+}
+
+.piece-palette-item.selected {
+  border-color: #3b82f6;
+  border-width: 3px;
+  background-color: #eff6ff;
 }
 
 #puzzle-status.success {
