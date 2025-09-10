@@ -1,0 +1,251 @@
+/* Interactive Puzzle Styles */
+.puzzle-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  gap: 2px;
+  width: min(350px, 90vw);
+  height: calc(min(350px, 90vw) * 8 / 7);
+  margin: 0 auto;
+  background-color: #e5e7eb;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .puzzle-grid {
+    width: min(300px, 90vw);
+    height: calc(min(300px, 90vw) * 8 / 7);
+    padding: 6px;
+    gap: 1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .puzzle-grid {
+    width: min(280px, 95vw);
+    height: calc(min(280px, 95vw) * 8 / 7);
+    padding: 4px;
+  }
+  
+  .piece-palette-item {
+    padding: 4px;
+    min-height: 50px;
+  }
+}
+
+.grid-cell {
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 2px;
+  position: relative;
+  transition: background-color 0.2s;
+}
+
+.grid-cell.occupied {
+  border-color: #374151;
+  border-width: 2px;
+}
+
+/* Ensure tangram piece colors show on grid cells */
+.grid-cell.tangram-piece-0 {
+  background-color: var(--piece-0-color);
+}
+
+.grid-cell.tangram-piece-1 {
+  background-color: var(--piece-1-color);
+}
+
+.grid-cell.tangram-piece-2 {
+  background-color: var(--piece-2-color);
+}
+
+.grid-cell.tangram-piece-3 {
+  background-color: var(--piece-3-color);
+}
+
+.grid-cell.tangram-piece-4 {
+  background-color: var(--piece-4-color);
+}
+
+.grid-cell.tangram-piece-5 {
+  background-color: var(--piece-5-color);
+}
+
+.grid-cell.tangram-piece-6 {
+  background-color: var(--piece-6-color);
+}
+
+.grid-cell.tangram-piece-7 {
+  background-color: var(--piece-7-color);
+}
+
+.grid-cell.tangram-piece-8 {
+  background-color: var(--piece-8-color);
+}
+
+.grid-cell.tangram-piece-9 {
+  background-color: var(--piece-9-color);
+}
+
+.grid-cell.date-cell {
+  background-color: #ddd6fe;
+  border-color: #8b5cf6;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+.grid-cell.inactive-date-cell {
+  background-color: #f9fafb;
+  color: #9ca3af;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+.grid-cell.invalid-cell {
+  background-color: transparent;
+  border: none;
+  pointer-events: none;
+}
+
+.tangram-piece {
+  position: absolute;
+  cursor: grab;
+  user-select: none;
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+
+.tangram-piece:hover {
+  z-index: 20;
+  filter: brightness(1.1);
+}
+
+.tangram-piece.dragging {
+  cursor: grabbing;
+  z-index: 30;
+  transform: scale(1.05);
+}
+
+.piece-cell {
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+  display: inline-block;
+  margin: 0;
+  vertical-align: top;
+}
+
+.piece-palette-item {
+  background-color: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 6px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+@media (min-width: 1024px) {
+  .piece-palette-item {
+    padding: 8px;
+    min-height: 80px;
+  }
+}
+
+.piece-palette-item:hover {
+  border-color: #9ca3af;
+}
+
+.piece-palette-item.empty {
+  border-style: dashed;
+  opacity: 0.5;
+}
+
+.piece-palette-item.selected {
+  border-color: #3b82f6;
+  border-width: 3px;
+  background-color: #eff6ff;
+}
+
+#puzzle-status.success {
+  color: #059669;
+  background-color: #d1fae5;
+}
+
+#puzzle-status.error {
+  color: #dc2626;
+  background-color: #fee2e2;
+}
+
+/* Drag preview styles */
+.drag-preview {
+  border: 2px solid rgba(255, 255, 255, 0.8) !important;
+  opacity: 0.6 !important;
+}
+
+.drag-preview-valid {
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.5);
+}
+
+.drag-preview-invalid {
+  background-color: #ef4444 !important;
+  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.5);
+}
+
+/* Preview colors for each piece */
+.drag-preview[data-preview-piece="0"][data-preview-valid="true"] {
+  background-color: var(--piece-0-color) !important;
+}
+
+.drag-preview[data-preview-piece="1"][data-preview-valid="true"] {
+  background-color: var(--piece-1-color) !important;
+}
+
+.drag-preview[data-preview-piece="2"][data-preview-valid="true"] {
+  background-color: var(--piece-2-color) !important;
+}
+
+.drag-preview[data-preview-piece="3"][data-preview-valid="true"] {
+  background-color: var(--piece-3-color) !important;
+}
+
+.drag-preview[data-preview-piece="4"][data-preview-valid="true"] {
+  background-color: var(--piece-4-color) !important;
+}
+
+.drag-preview[data-preview-piece="5"][data-preview-valid="true"] {
+  background-color: var(--piece-5-color) !important;
+}
+
+.drag-preview[data-preview-piece="6"][data-preview-valid="true"] {
+  background-color: var(--piece-6-color) !important;
+}
+
+.drag-preview[data-preview-piece="7"][data-preview-valid="true"] {
+  background-color: var(--piece-7-color) !important;
+}
+
+.drag-preview[data-preview-piece="8"][data-preview-valid="true"] {
+  background-color: var(--piece-8-color) !important;
+}
+
+.drag-preview[data-preview-piece="9"][data-preview-valid="true"] {
+  background-color: var(--piece-9-color) !important;
+}
+
+/* Scaled dragging piece */
+.dragging-scaled {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}

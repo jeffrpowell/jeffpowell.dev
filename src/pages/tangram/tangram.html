@@ -3,26 +3,83 @@
   <div class="max-w-5xl mx-auto">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Tangram Calendar</h1>
 
-    <div class="text-lg mb-4">
-      <span id="tangram-date" class="font-semibold"></span>
+    <div class="mt-6 bg-white shadow-md-full rounded-lg p-6">
+      <h3 class="text-xl font-semibold mb-3">The game</h3>
+      <p class="text-gray-700">
+        Tangram Calendar is a daily tangram puzzle.
+        <br>The goal is to use all 10 pieces to fill the grid, except for three single cells representing the current date.
+        <br>There are multiple valid solutions for every day. If you find one, challenge yourself to reset and try for a different one!
+        <br>If you're stuck, a hint is provided below showing the location of 2-4 pieces which are in the same location across five different valid solutions.
+        <br>If you give up, a sample solution is also provided below. Enjoy!
+      </p>
+      <h3 class="text-xl font-semibold mb-3 mt-3">Controls</h3>
+      <p class="text-gray-700">
+        Drag pieces from the palette onto the grid. If you drop a piece on top of another piece, the other piece is returned to the palette.
+        <br><strong>Desktop:</strong> Right-click to rotate, Shift+click to flip pieces.
+        <br><strong>Mobile:</strong> Tap a piece to select it, then use the rotate/flip buttons that appear above the palette.
+      </p>
     </div>
+
+    <!-- Interactive Puzzle Section -->
+    <section class="bg-white shadow-md-full rounded-lg p-4 md:p-6 mb-8 mt-8">
+      <div class="flex flex-col lg:flex-row gap-4 lg:gap-6">
+        <!-- Game Board -->
+        <div class="flex-1 order-2 lg:order-1">
+          <div id="tangram-board" class="relative">
+            <!-- Interactive grid will be rendered here -->
+          </div>
+          <div class="mt-2 md:mt-4 flex gap-2 flex-wrap justify-center">
+            <div id="puzzle-status" class="px-3 py-2 text-sm font-medium rounded"></div>
+          </div>
+        </div>
+        
+        <!-- Piece Palette -->
+        <div class="w-full lg:w-80 order-1 lg:order-2">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="text-lg font-semibold">Tangram Pieces</h3>
+            <button id="reset-puzzle-btn" class="px-3 py-2 bg-red-600 text-white rounded-sm hover:bg-red-700 transition-colors text-sm">
+              Reset
+            </button>
+          </div>
+          
+          <!-- Mobile Controls -->
+          <div id="mobile-controls" class="mb-3 p-3 bg-midground rounded-lg border border-blue-200 lg:hidden">
+            <div class="text-sm font-medium text-blue-800 mb-2">Selected Piece Controls:</div>
+            <div class="flex gap-2">
+              <button id="rotate-btn" class="flex-1 px-3 py-2 bg-primary text-white rounded-sm transition-colors text-sm disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
+                🔄 Rotate
+              </button>
+              <button id="flip-btn" class="flex-1 px-3 py-2 bg-primary text-white rounded-sm transition-colors text-sm disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
+                ↔️ Flip
+              </button>
+            </div>
+            <div id="selected-piece-info" class="text-xs text-blue-600 mt-1">Tap a piece to select it</div>
+          </div>
+          
+          <div id="piece-palette" class="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-2 gap-2 lg:gap-3 p-3 lg:p-4 bg-gray-50 rounded-lg max-h-32 lg:max-h-none overflow-y-auto lg:overflow-visible">
+            <!-- Pieces will be rendered here -->
+          </div>
+        </div>
+      </div>
+    </section>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Hint Section -->
       <section class="bg-white shadow-md-full rounded-lg p-6">
         <h2 class="text-2xl font-semibold text-gray-800 mb-4">Hint</h2>
-        <div id="tangram-hint" class="font-mono text-lg tangram-grid">
+        <div id="tangram-hint" class="font-mono text-lg tangram-grid hidden p-4 bg-gray-50 rounded min-h-[200px] whitespace-pre leading-tight">
           <!-- Hint will be loaded here -->
-          <div class="flex items-center justify-center h-32">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-700"></div>
-          </div>
         </div>
+        <button id="show-hint-btn"
+          class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-700 transition-colors">
+          Click to reveal hint
+        </button>
       </section>
 
       <!-- Solution Section -->
       <section class="bg-white shadow-md-full rounded-lg p-6">
         <h2 class="text-2xl font-semibold text-gray-800 mb-4">Solution</h2>
-        <div id="tangram-solution" class="font-mono text-lg tangram-grid hidden">
+        <div id="tangram-solution" class="font-mono text-lg tangram-grid hidden p-4 bg-gray-50 rounded min-h-[200px] whitespace-pre leading-tight">
           <!-- Solution will be loaded here -->
         </div>
         <button id="show-solution-btn"
@@ -30,15 +87,6 @@
           Click to reveal a solution
         </button>
       </section>
-    </div>
-
-    <div class="mt-6 bg-white shadow-md-full rounded-lg p-6">
-      <h3 class="text-xl font-semibold mb-3">About Tangram Calendar</h3>
-      <p class="text-gray-700">
-        The Tangram Calendar shows a daily tangram puzzle. The hint gives you the shape to create,
-        and the solution shows one possible arrangement of the seven standard tangram pieces.
-        The tangram is represented using ASCII characters, with each piece having its own color.
-      </p>
     </div>
   </div>
 </div>

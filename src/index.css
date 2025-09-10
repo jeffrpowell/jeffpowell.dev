@@ -40,6 +40,18 @@
     to right in oklab,
     var(--color-primary) -9% -9%, 7%, var(--color-midground) 28% 63%, 90%, var(--color-primary) 100%
   );
+  
+  /* Tangram piece colors */
+  --piece-0-color: rgb(172, 55, 55);
+  --piece-1-color: rgb(223, 124, 44);
+  --piece-2-color: rgb(209, 189, 9);
+  --piece-3-color: rgb(15, 77, 15);
+  --piece-4-color: rgb(15, 158, 146);
+  --piece-5-color: rgb(56, 79, 184);
+  --piece-6-color: rgb(99, 17, 131);
+  --piece-7-color: rgb(168, 17, 136);
+  --piece-8-color: rgb(100, 61, 9);
+  --piece-9-color: rgb(55, 59, 66);
 }
 
 /* Accessibility */

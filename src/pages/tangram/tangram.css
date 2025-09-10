@@ -19,50 +19,41 @@
 
 /* Colorize tangram pieces */
 .tangram-piece-0 {
-    background-color: rgb(172, 55, 55);
+    background-color: var(--piece-0-color);
 }
 
 .tangram-piece-1 {
-    background-color: rgb(223, 124, 44);
+    background-color: var(--piece-1-color);
 }
 
 .tangram-piece-2 {
-    background-color: rgb(209, 189, 9);
+    background-color: var(--piece-2-color);
 }
 
 .tangram-piece-3 {
-    background-color: rgb(15, 77, 15);
+    background-color: var(--piece-3-color);
 }
 
 .tangram-piece-4 {
-    background-color: rgb(15, 158, 146);
+    background-color: var(--piece-4-color);
 }
 
 .tangram-piece-5 {
-    background-color: rgb(56, 79, 184);
+    background-color: var(--piece-5-color);
 }
 
 .tangram-piece-6 {
-    background-color: rgb(99, 17, 131);
+    background-color: var(--piece-6-color);
 }
 
 .tangram-piece-7 {
-    background-color: rgb(168, 17, 136);
+    background-color: var(--piece-7-color);
 }
 
 .tangram-piece-8 {
-    background-color: rgb(100, 61, 9);
+    background-color: var(--piece-8-color);
 }
 
 .tangram-piece-9 {
-    background-color: rgb(55, 59, 66);
-}
-
-/* Add some space around the grid */
-#tangram-hint, 
-#tangram-solution {
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 0.25rem;
-  min-height: 200px;
+    background-color: var(--piece-9-color);
 }
