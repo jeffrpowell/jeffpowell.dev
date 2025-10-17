@@ -1,0 +1,33 @@
+{
+	"name": "jeffpowell-dev",
+	"workers_dev": false,
+	"preview_urls": false,
+	"compatibility_date": "2025-10-17",
+	"dev": {
+		"ip": "0.0.0.0" // Required to enable accessing the dev server from outside the devcontainer.
+	},
+	"main": "worker-src/index.js",
+	"routes": [
+		{
+			"pattern": "jeffpowell.dev/*",
+			"zone_name": "jeffpowell.dev"
+		},
+		{
+			"pattern": "jeffpowell.dev",
+			"zone_name": "jeffpowell.dev",
+			"custom_domain": true
+		}
+	],
+	"assets": { 
+		"directory": "./dist",
+    	"run_worker_first": ["/assets/*"]
+	},
+	"r2_buckets": [
+		{
+			"binding": "JEFFPOWELL_DEV_ASSETS",
+			"bucket_name": "jeffpowell-dev-assets",
+			"remote": true
+		}
+	]
+	
+}

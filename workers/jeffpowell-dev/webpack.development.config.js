@@ -60,7 +60,7 @@ module.exports = {
         { from: 'src/pages/portfolio/portfolio.html', to: 'portfolio.html' },
         { from: 'src/pages/tech/tech.html', to: 'tech.html' },
         { from: 'src/pages/tangram/tangram.html', to: 'tangram.html' },
-        { from: 'src/assets', to: 'assets' },
+        { from: 'src/assets', to: 'static' },
         { from: 'CNAME', to: '' },
       ],
     }),
