@@ -10,5 +10,8 @@
     "build-prod": "pnpm -r run build-prod",
     "deploy": "pnpm -r run deploy",
     "deploy-dev": "pnpm -r run deploy-dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
   }
 }

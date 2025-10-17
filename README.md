@@ -33,6 +33,16 @@ pnpm install
 
 ## 🔧 Development
 
+### Login workaround
+
+Until https://github.com/cloudflare/workers-sdk/issues/10603 and/or https://github.com/cloudflare/workers-sdk/issues/5937 are resolved, you have to perform the following workaround to get wrangler to login:
+
+1. `pnpm wrangler login --callback-host 0.0.0.0`
+2. Copy-paste the URL
+3. Manually change "0.0.0.0" to "localhost"
+4. Open your modified link in your browser
+5. Click the `Allow` button
+
 ### Working with Workers
 
 Each worker has its own Wrangler version. Navigate to the worker directory to use Wrangler commands:
@@ -74,29 +84,13 @@ cd workers/jeffpowell-dev
 pnpm deploy
 ```
 
-## 🏗️ Workers
-
-### jeffpowell-dev
-Personal portfolio website showcasing projects, skills, and professional journey.
-
-**Tech Stack:**
-- HTML5 & CSS3
-- JavaScript (ES6+)
-- HTMX 2.0.6
-- Tailwind CSS
-- Webpack 5
-- Cloudflare Workers
-
-**Features:**
-- Clean, minimal, and accessible design
-- Interactive tangram puzzle game
-- Project gallery with live demos
-- Responsive design for all devices
-- Fast load times with edge computing
-
-Visit: [https://jeffpowell.dev](https://jeffpowell.dev)
-
 ## 📦 Adding New Workers
+
+If you need to pull down an existing worker to compare or start with, AND you haven't downloaded it already, use this command:
+`pnpm wrangler --cwd workers init --from-dash [name-of-worker]`
+It will download to a directory under `/tmp/`, copy the src files, and then error out looking for a `wrangler.toml` file. Go manually hunt for the directory and copy the `wrangler.jsonc` file out of there.
+
+Otherwise, here's the standard recipe for adding a new worker.
 
 1. Create a new directory in `workers/`:
    ```bash

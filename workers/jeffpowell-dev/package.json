@@ -10,7 +10,7 @@
     "start": "webpack serve --mode=development --config webpack.development.config.js",
     "deploy": "pnpm build-prod && wrangler deploy",
     "deploy-dev": "pnpm build && wrangler deploy",
-    "preview": "wrangler dev"
+    "dev": "pnpm build && wrangler dev"
   },
   "dependencies": {
     "d3": "7.2.1",
