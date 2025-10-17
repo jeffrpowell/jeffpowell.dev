@@ -4,12 +4,11 @@
   "version": "1.0.0",
   "author": "Jeff Powell",
   "license": "MIT",
+  "packageManager": "pnpm@10.18.3",
   "private": true,
   "scripts": {
     "build": "pnpm -r run build",
-    "build-prod": "pnpm -r run build-prod",
-    "deploy": "pnpm -r run deploy",
-    "deploy-dev": "pnpm -r run deploy-dev"
+    "build-prod": "pnpm -r run build-prod"
   },
   "devDependencies": {
     "wrangler": "^4.0.0"
