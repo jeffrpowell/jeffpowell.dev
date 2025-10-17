@@ -6,19 +6,20 @@ This is a monorepo containing Cloudflare workers for Jeff Powell's projects.
 
 ```
 .
-└── workers/             # Cloudflare Workers
-    └── jeffpowell-dev/  # Personal portfolio website worker
-        ├── src/         # Source code
-        ├── package.json
-        └── wrangler.jsonc
+├── .devcontainer/                  # Dev environment config and setup
+└── workers/                        # Cloudflare Workers
+    ├── jeffpowell-dev/             # Personal portfolio website worker
+    ├── email-triage/               # Email routing logic worker
+    ├── tangram-calendar/           # Supplies hints and solutions for tangram puzzle
+    ├── tangram-calendar-submit/    # Submit tangram puzzle hints and solutions
 ```
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js >= 18
+- Node.js
 - pnpm
-- Cloudflare account and API token
+- wrangler
 
 ### Installation
 
@@ -29,9 +30,14 @@ cd jeffpowell.dev
 
 # Install all workspace dependencies
 pnpm install
-```
 
-## 🔧 Development
+# Login to Cloudflare; SEE WORKAROUND NOTES BELOW
+pnpm wrangler login --callback-host 0.0.0.0
+
+# Run a worker
+cd workers/[worker-name]
+pnpm dev #runs a build command, if applicable, then runs wrangler dev
+```
 
 ### Login workaround
 
@@ -43,6 +49,8 @@ Until https://github.com/cloudflare/workers-sdk/issues/10603 and/or https://gith
 4. Open your modified link in your browser
 5. Click the `Allow` button
 
+## 🔧 Development
+
 ### Working with Workers
 
 Each worker has its own Wrangler version. Navigate to the worker directory to use Wrangler commands:
@@ -52,7 +60,7 @@ Each worker has its own Wrangler version. Navigate to the worker directory to us
 cd workers/jeffpowell-dev
 
 # Start local development server
-pnpm start
+pnpm dev
 
 # Run Wrangler commands directly
 pnpm wrangler dev
@@ -64,29 +72,6 @@ pnpm wrangler whoami
 ### Debugging
 
 Debugging is configured in a VSCode `launch.json` file for you.
-
-### Building from Root
-
-```bash
-# Build all workers
-pnpm build
-
-# Build production bundles
-pnpm build-prod
-```
-
-## 🚀 Deployment
-
-### Deploy All Workers
-```bash
-pnpm deploy
-```
-
-### Deploy Specific Worker
-```bash
-cd workers/jeffpowell-dev
-pnpm deploy
-```
 
 ## 📦 Adding New Workers
 
@@ -101,14 +86,9 @@ Otherwise, here's the standard recipe for adding a new worker.
    mkdir workers/my-new-worker
    cd workers/my-new-worker
    ```
-
 2. Initialize with `package.json` and `wrangler.jsonc`
-
+    * Copy from another worker to get a head-start
 3. The monorepo will automatically include it in workspace commands
-
-## 🤝 Contributing
-
-This is a personal project, but suggestions and feedback are welcome! Feel free to open an issue or reach out directly.
 
 ## 📝 License
 
