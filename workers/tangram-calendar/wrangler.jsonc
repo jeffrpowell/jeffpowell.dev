@@ -18,9 +18,6 @@
       "custom_domain": true
     }
   ],
-  "limits": {
-    "cpu_ms": 50
-  },
   "kv_namespaces": [
     {
       "id": "5257dbd282424ab2b434e688642abc1e",
