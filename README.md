@@ -61,6 +61,10 @@ pnpm wrangler whoami
 # ... any other wrangler command
 ```
 
+### Debugging
+
+Debugging is configured in a VSCode `launch.json` file for you.
+
 ### Building from Root
 
 ```bash

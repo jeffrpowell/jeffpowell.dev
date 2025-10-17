@@ -19,11 +19,19 @@ async function handleRequest(request, env, ctx) {
     const path = url.pathname.slice(1);
     console.log(path);
     
-    if (!ALLOW_LIST.includes(path)) {
+    // Only handle /assets/* requests
+    if (!path.startsWith('assets/')) {
+        return new Response("Not Found", { status: 404 });
+    }
+    
+    // Extract filename from /assets/[filename]
+    const filename = path.slice('assets/'.length);
+    
+    if (!ALLOW_LIST.includes(filename)) {
         return new Response("Not Found", { status: 404 });
     }
 
-    const cacheKey = `https://${url.hostname}${path}`;
+    const cacheKey = `https://${url.hostname}${url.pathname}`;
     const cache = caches.default;
     let response = await cache.match(cacheKey);
     
@@ -31,7 +39,8 @@ async function handleRequest(request, env, ctx) {
         console.log(
             `${request.url} not present in cache (cacheKey: ${cacheKey})`
         );
-        const object = await env.JEFFPOWELL_DEV_ASSETS.get(path);
+        // Use filename (not path) when fetching from R2
+        const object = await env.JEFFPOWELL_DEV_ASSETS.get(filename);
         if (!object) {
             return new Response("Not Found", { status: 404 });
         }
