@@ -17,6 +17,7 @@ Feel free to reach out for collaboration, consulting, or just to say hi!
 - **HTMX 2.0.6**
 - **Webpack 5**
 - **Responsive design** for all devices
+- **Cloudflare worker** and Wrangler for hosting
 
 ## ✨ Features
 - Clean, minimal, and accessible design
@@ -28,7 +29,7 @@ Feel free to reach out for collaboration, consulting, or just to say hi!
 ## 🚧 Development
 
 ### Prerequisites
-- Node.js >= 18
+- Node.js
 - pnpm
 
 ### Setup
@@ -37,96 +38,10 @@ Feel free to reach out for collaboration, consulting, or just to say hi!
 pnpm install
 
 # Start local dev server
-pnpm start
+pnpm dev
 ```
 
-Visit http://localhost:4290
-
-### Building
-```bash
-# Development build
-pnpm build
-
-# Production build
-pnpm build-prod
-```
-
-### Deployment
-```bash
-# Deploy to production
-pnpm deploy
-
-# Deploy development build
-pnpm deploy-dev
-
-# Preview with wrangler dev
-pnpm preview
-```
-
-## Project Structure
-
-```
-workers/jeffpowell-dev/
-├── src/
-│   ├── index.html          # Main HTML template
-│   ├── index.js            # Main JavaScript entry
-│   ├── index.css           # Global styles
-│   ├── navigation.js       # Navigation handling
-│   ├── assets/             # Images and static assets
-│   └── pages/              # Page-specific HTML/JS
-│       ├── about-me/
-│       ├── portfolio/
-│       ├── tech/
-│       └── tangram/        # Interactive puzzle game
-├── webpack.development.config.js
-├── webpack.production.config.js
-├── postcss.config.js
-├── wrangler.jsonc
-└── package.json
-```
-
-## Configuration
-
-### Wrangler
-Configuration in `wrangler.jsonc`:
-- Worker name: `jeffpowell-dev`
-- Assets directory: `./dist`
-- Compatibility date: 2025-06-05
-
-### Webpack
-Two configurations:
-- **Development**: Source maps, dev server, hot reload
-- **Production**: Minification, optimization, tree shaking
-
-## Adding New Pages
-
-1. Create page directory in `src/pages/`:
-   ```bash
-   mkdir src/pages/my-page
-   ```
-
-2. Add HTML file:
-   ```html
-   <div data-page="my-page">
-     <!-- Page content -->
-   </div>
-   ```
-
-3. Add JavaScript (if needed):
-   ```javascript
-   export class MyPageInterface {
-     constructor(element) {
-       this.element = element;
-       this.init();
-     }
-     
-     init() {
-       // Initialize page
-     }
-   }
-   ```
-
-4. Update navigation in `index.js`
+Visit http://localhost:8787 (spot-check that the URI matches what's in the terminal output)
 
 ## License
 
