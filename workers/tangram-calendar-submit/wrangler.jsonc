@@ -1,0 +1,36 @@
+{
+  "name": "tangram-calendar-submit",
+  "workers_dev": false,
+  "preview_urls": false,
+  "compatibility_date": "2025-10-17",
+	"dev": {
+		"ip": "0.0.0.0" // Required to enable accessing the dev server from outside the devcontainer.
+	},
+  "main": "src/worker.js",
+  "routes": [
+    {
+      "pattern": "tangram-calendar-submit.jeffpowell.dev/*",
+      "zone_name": "jeffpowell.dev"
+    },
+    {
+      "pattern": "tangram-calendar-submit.jeffpowell.dev",
+      "zone_name": "jeffpowell.dev",
+      "custom_domain": true
+    }
+  ],
+  "limits": {
+    "cpu_ms": 50
+  },
+  "kv_namespaces": [
+    {
+      "id": "5257dbd282424ab2b434e688642abc1e",
+      "binding": "KV_HINTS",
+      "remote": true
+    },
+    {
+      "id": "a0e8fe7a67834dbc8c029be1b2bbc506",
+      "binding": "KV_SOLUTIONS",
+      "remote": true
+    }
+  ]
+}
