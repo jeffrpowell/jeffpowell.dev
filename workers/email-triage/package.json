@@ -1,0 +1,14 @@
+{
+  "name": "@jeffpowell/email-triage",
+  "description": "Triage script for incoming email to jeffpowell.dev",
+  "version": "1.0.0",
+  "author": "Jeff Powell",
+  "license": "MIT",
+  "packageManager": "pnpm@10.18.3",
+  "scripts": {
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
