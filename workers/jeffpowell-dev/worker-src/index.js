@@ -1,7 +1,3 @@
-addEventListener("fetch", event => {
-  event.respondWith(handleRequest(event))
-})
-
 const ALLOW_LIST = [
     'aoc.jpg',
     'backup.jpg',
@@ -18,11 +14,11 @@ const ALLOW_LIST = [
     'ListawayWordmarkLight.png'
 ];
 
-async function handleRequest(event) {
-    const request = event.request;
+async function handleRequest(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname.slice(1);
     console.log(path);
+    
     if (!ALLOW_LIST.includes(path)) {
         return new Response("Not Found", { status: 404 });
     }
@@ -30,11 +26,12 @@ async function handleRequest(event) {
     const cacheKey = `https://${url.hostname}${path}`;
     const cache = caches.default;
     let response = await cache.match(cacheKey);
+    
     if (!response) {
         console.log(
             `${request.url} not present in cache (cacheKey: ${cacheKey})`
         );
-        const object = await JEFFPOWELL_DEV_ASSETS.get(path);
+        const object = await env.JEFFPOWELL_DEV_ASSETS.get(path);
         if (!object) {
             return new Response("Not Found", { status: 404 });
         }
@@ -44,10 +41,13 @@ async function handleRequest(event) {
         response.headers.append('etag', object.httpEtag)
         // Store the fetched response for cacheKey
         // Use waitUntil so you can return the response without blocking on writing to cache
-        event.waitUntil(cache.put(cacheKey, response.clone()));
+        ctx.waitUntil(cache.put(cacheKey, response.clone()));
     } else {
         console.log(`Cache hit for: ${request.url} (cacheKey: ${cacheKey}).`);
     }
     return response;
-  
 }
+
+export default {
+    fetch: handleRequest
+};
