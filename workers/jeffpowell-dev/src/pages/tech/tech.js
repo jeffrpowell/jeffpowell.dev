@@ -15,12 +15,19 @@ const KNOWN_TECH = {
         { name: 'Clojure', value: 1 },
         { name: 'HTML5', value: 3 },
         { name: 'CSS4', value: 3 },
-        { name: 'SCSS', value: 3 },
-        { name: 'LESS', value: 3 },
         { name: 'Javascript', value: 3 },
         { name: 'SVG', value: 2 },
         { name: 'Kotlin', value: 1 },
-        { name: 'TailwindCSS', value: 3 }
+      ]
+    },
+    {
+      name: 'Specification & Notation Syntax',
+      children: [
+        { name: 'JSON', value: 3 },
+        { name: 'YAML', value: 3 },
+        { name: 'Terraform', value: 2 },
+        { name: 'Markdown', value: 3 },
+        { name: 'TOML', value: 1 }
       ]
     },
     {
@@ -35,13 +42,13 @@ const KNOWN_TECH = {
       name: 'Network Protocol',
       children: [
         { name: 'HTTP/1', value: 3 },
-        { name: 'HTTP/2', value: 1 },
-        { name: 'HTTP/3', value: 1 },
         { name: 'AJAX', value: 3 },
         { name: 'REST', value: 3 },
         { name: 'Websocket', value: 3 },
-        { name: 'AMQP (RabbitMQ)', value: 2 },
-        { name: 'JSON', value: 3 }
+        { name: 'AMQP', value: 2 },
+        { name: 'DNS', value: 2 },
+        { name: 'Firewall', value: 2 },
+        { name: 'Tailscale', value: 2 },
       ]
     },
     {
@@ -83,8 +90,8 @@ const KNOWN_TECH = {
         { name: 'Maven', value: 3 },
         { name: 'Gradle', value: 1 },
         { name: 'NPM', value: 3 },
-        { name: 'Yarn', value: 3 },
-        { name: 'Pip', value: 2 }
+        { name: 'Pip', value: 2 },
+        { name: 'PNPM', value: 2 }
       ]
     },
     {
@@ -97,14 +104,19 @@ const KNOWN_TECH = {
         { name: 'Redis', value: 2 },
         { name: 'Postgres', value: 2 },
         { name: 'S3', value: 2 },
-        { name: 'R2', value: 2 }
+        { name: 'R2', value: 2 },
+        { name: 'DynamoDB', value: 2 }
       ]
     },
     {
       name: 'Web Framework',
       children: [
         { name: 'Angular', value: 2 },
-        { name: 'React', value: 1 }
+        { name: 'React', value: 1 },
+        { name: 'HTMX', value: 2 },
+        { name: 'TailwindCSS', value: 3 },
+        { name: 'SCSS', value: 3 },
+        { name: 'LESS', value: 3 }
       ]
     },
     {
@@ -128,13 +140,12 @@ const KNOWN_TECH = {
       name: 'CI/CD',
       children: [
         { name: 'Artifactory', value: 2 },
-        { name: 'Jenkins/Cloudbees', value: 2 },
-        { name: 'YAML', value: 3 },
+        { name: 'Jenkins/ Cloudbees', value: 2 },
         { name: 'Docker + Compose', value: 3 },
         { name: 'SonarQube', value: 3 },
         { name: 'Github Actions', value: 2 },
         { name: 'Gitlab Actions', value: 2 },
-        { name: 'Cloudflare Pipelines', value: 1 }
+        { name: 'Cloudflare Builds', value: 2 }
       ]
     },
     {
@@ -142,7 +153,7 @@ const KNOWN_TECH = {
       children: [
         { name: 'Amazon AWS', value: 2 },
         { name: 'Cloudflare', value: 3 },
-        { name: 'Terraform', value: 2 }
+        { name: 'Azure', value: 1 }
       ]
     },
     {
@@ -157,7 +168,19 @@ const KNOWN_TECH = {
       children: [
         { name: 'Nginx', value: 3 },
         { name: 'Apache', value: 1 },
-        { name: 'Tomcat', value: 2 }
+        { name: 'Tomcat', value: 2 },
+        { name: 'Traefik', value: 2 }
+      ]
+    },
+    {
+      name: 'Home lab',
+      children: [
+        { name: 'Hardware procurement', value: 3 },
+        { name: 'Networking', value: 2 },
+        { name: 'Custom PC assembly', value: 3 },
+        { name: 'Custom patch cable', value: 3 },
+        { name: '3-2-1 Backups', value: 3 },
+        { name: 'SSL& Reverse proxy', value: 2 },
       ]
     }
   ]
