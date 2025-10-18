@@ -7,11 +7,11 @@ This is a monorepo containing Cloudflare workers for Jeff Powell's projects.
 ```
 .
 ├── .devcontainer/                  # Dev environment config and setup
-└── workers/                        # Cloudflare Workers
+└── workers/
     ├── jeffpowell-dev/             # Personal portfolio website worker
     ├── email-triage/               # Email routing logic worker
     ├── tangram-calendar/           # Supplies hints and solutions for tangram puzzle
-    ├── tangram-calendar-submit/    # Submit tangram puzzle hints and solutions
+    └── tangram-calendar-submit/    # Submit tangram puzzle hints and solutions
 ```
 
 ## 🚀 Quick Start
@@ -20,8 +20,13 @@ This is a monorepo containing Cloudflare workers for Jeff Powell's projects.
 - Node.js
 - pnpm
 - wrangler
+  
+  __OR__
 
-### Installation
+- Docker
+- VS Code with the Dev Containers extension
+
+### Build and local deployment
 
 ```bash
 # Clone the repo
@@ -72,6 +77,8 @@ pnpm wrangler whoami
 ### Debugging
 
 Debugging is configured in a VSCode `launch.json` file for you.
+
+Otherwise, start reading at this [trailhead](https://developers.cloudflare.com/workers/observability/dev-tools/breakpoints/).
 
 ## 📦 Adding New Workers
 
