@@ -37,11 +37,24 @@ Feel free to reach out for collaboration, consulting, or just to say hi!
 # Install dependencies
 pnpm install
 
+# Login to Cloudflare; SEE WORKAROUND NOTES BELOW
+pnpm wrangler login --callback-host 0.0.0.0
+
 # Start local dev server
 pnpm dev
 ```
 
 Visit http://localhost:8787 (spot-check that the URI matches what's in the terminal output)
+
+### Login workaround
+
+Until https://github.com/cloudflare/workers-sdk/issues/10603 and/or https://github.com/cloudflare/workers-sdk/issues/5937 are resolved, you have to perform the following workaround to get wrangler to login:
+
+1. `pnpm wrangler login --callback-host 0.0.0.0`
+2. Copy-paste the URL
+3. Manually change "0.0.0.0" to "localhost"
+4. Open your modified link in your browser
+5. Click the `Allow` button
 
 ## License
 
