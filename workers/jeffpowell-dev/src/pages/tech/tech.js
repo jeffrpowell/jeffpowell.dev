@@ -21,7 +21,7 @@ const KNOWN_TECH = {
       ]
     },
     {
-      name: 'Specification & Notation Syntax',
+      name: 'Spec& Notation Syntax',
       children: [
         { name: 'JSON', value: 3 },
         { name: 'YAML', value: 3 },
@@ -67,12 +67,13 @@ const KNOWN_TECH = {
     {
       name: 'Testing',
       children: [
-        { name: 'JUnit 5', value: 3 },
+        { name: 'JUnit5', value: 3 },
         { name: 'Jasmine', value: 3 },
         { name: 'Karma', value: 2 },
         { name: 'Mockito', value: 3 },
         { name: 'JMeter', value: 2 },
-        { name: 'Cypress', value: 2 }
+        { name: 'Cypress', value: 2 },
+        { name: 'Responsive design', value: 3 },
       ]
     },
     {
@@ -173,7 +174,7 @@ const KNOWN_TECH = {
       ]
     },
     {
-      name: 'Home lab',
+      name: 'Home Lab',
       children: [
         { name: 'Hardware procurement', value: 3 },
         { name: 'Networking', value: 2 },
@@ -189,7 +190,7 @@ const KNOWN_TECH = {
 // Define colors
 const COLORS = {
   light: 'oklch(0.8976 0.0785 134.47)', // Light green
-  medium: 'oklch(0.681 0.148 134.47)', // Medium green
+  medium: 'oklch(0.77 0.148 134.47)', // Medium green
   'dark-border': '#3f6212' // Dark green border
 };
 
@@ -445,7 +446,7 @@ export class KnownTechPage extends PageInterface {
       .join('text')
       .style('fill-opacity', d => (d.parent === currentNode ? 1 : 0))
       .style('display', d => (d.parent === currentNode ? 'inline' : 'none'))
-      .style('font-size', d => Math.max(0.35, 1 / (2 * (d.depth || 1))) + 'rem')
+      .style('font-size', d => (d.depth || 1) === 1 ? '0.9rem' : '0.25rem')
       .attr('x', d => d.x)
       .attr('y', d => d.y)
       .html(d => generateLabelSVGText(d.data.name, d.x));
