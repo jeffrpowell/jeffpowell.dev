@@ -15,9 +15,19 @@ export default {
       destination = route;
     }
 
+    // Create prefix structure: date/from-address/filename
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const datePrefix = `${year}-${month}-${day}`;
+    
+    // Sanitize the 'from' address to be path-safe
+    const fromSanitized = from.replace(/[^a-zA-Z0-9._\-]/g, '_');
+    const filename = `${Date.now()}-${crypto.randomUUID()}.eml`;
+    const key = `${datePrefix}/${fromSanitized}/${filename}`;
 
     // Log to Analytics Engine
-    const key = `${Date.now()}-${crypto.randomUUID()}.eml`;
     await env.ANALYTICS_EMAIL.writeDataPoint({
       blobs: [key, to, from, destination],
       doubles: [Date.now()]
@@ -28,7 +38,7 @@ export default {
       console.log({ result: "DROP", to });
       await message.setReject(`${to} is not allowed`);
     } else {
-      // Store raw email in R2 – lifecycle rules will delete it automatically
+      // Store raw email in R2 with hierarchical prefix
       const rawEmailStream = message.raw;
       const rawEmailBuffer = await streamToArrayBuffer(rawEmailStream);
       
@@ -49,7 +59,7 @@ export default {
 // Active health check logic — simplified for free tier
 async function healthCheck(env) {
   // For free-tier: mark PRIMARY as healthy unless manual toggle via KV
-  // In production, you’d replace this with actual synthetic test
+  // In production, you'd replace this with actual synthetic test
   await env.KV_EMAIL.put("PRIMARY_STATUS", "HEALTHY");
 }
 
