@@ -15,7 +15,13 @@ export default {
       destination = route;
     }
 
-    // Create prefix structure: date/from-address/filename
+    // Generate deduplication key from email headers
+    const dedupKey = await generateEmailFingerprint(message);
+    
+    // Check if we've already processed this email
+    const isDuplicate = await env.KV_DEDUP.get(dedupKey);
+
+    // Create prefix structure: date/from-address/dedup-key
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -24,28 +30,35 @@ export default {
     
     // Sanitize the 'from' address to be path-safe
     const fromSanitized = from.replace(/[^a-zA-Z0-9._\-]/g, '_');
-    const filename = `${Date.now()}-${crypto.randomUUID()}.eml`;
-    const key = `${datePrefix}/${fromSanitized}/${filename}`;
+    const key = `${datePrefix}/${fromSanitized}/${dedupKey}.eml`;
 
     // Log to Analytics Engine
     await env.ANALYTICS_EMAIL.writeDataPoint({
-      blobs: [key, to, from, destination],
+      blobs: [key, to, from, destination, isDuplicate ? "RETRY" : "FIRST"],
       doubles: [Date.now()]
     });
+
+    // Mark as processed in KV with TTL to prevent memory bloat (only on first attempt)
+    // 2-week TTL
+    if (!isDuplicate) {
+      await env.KV_DEDUP.put(dedupKey, key, { expirationTtl: 1209600 });
+    }
 
     // Forward or reject
     if (destination === "DROP") {
       console.log({ result: "DROP", to });
       await message.setReject(`${to} is not allowed`);
     } else {
-      // Store raw email in R2 with hierarchical prefix
-      const rawEmailStream = message.raw;
-      const rawEmailBuffer = await streamToArrayBuffer(rawEmailStream);
-      
-      await env.R2_BUCKET.put(key, rawEmailBuffer, {
-        httpMetadata: { contentType: "message/rfc822" }
-      });
-      console.log({ result: "FORWARD", to, target: destination });
+      // Store raw email in R2 only on first attempt
+      if (!isDuplicate) {
+        const rawEmailStream = message.raw;
+        const rawEmailBuffer = await streamToArrayBuffer(rawEmailStream);
+        
+        await env.R2_BUCKET.put(key, rawEmailBuffer, {
+          httpMetadata: { contentType: "message/rfc822" }
+        });
+      }
+      console.log({ result: "FORWARD", to: to, target: destination, duplicate: isDuplicate });
       await message.forward(destination);
     }
   },
@@ -55,6 +68,30 @@ export default {
     ctx.waitUntil(healthCheck(env));
   }
 };
+
+// Generate a fingerprint from email headers to identify duplicates
+async function generateEmailFingerprint(message) {
+  // Extract key headers that uniquely identify an email
+  const messageId = message.headers.get("Message-ID") || "";
+  const from = message.from || "";
+  const to = message.to || "";
+  const subject = message.headers.get("Subject") || "";
+  const date = message.headers.get("Date") || "";
+  
+  // Combine headers to create fingerprint
+  const fingerprinterSource = `${messageId}|${from}|${to}|${subject}|${date}`;
+  
+  // Use SubtleCrypto to hash the combined string
+  const encoder = new TextEncoder();
+  const data = encoder.encode(fingerprinterSource);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  
+  // Convert to hex string
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  
+  return hashHex;
+}
 
 // Active health check logic — simplified for free tier
 async function healthCheck(env) {

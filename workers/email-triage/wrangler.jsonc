@@ -32,6 +32,10 @@
       "id": "ac11074f2fa5402ca92a8fb9144b2181",
       "binding": "KV_EMAIL",
       "remote": true
+    },
+    {
+      "id": "202ca19503a644f8b74a24b1ef642c40",
+      "binding": "KV_DEDUP"
     }
   ],
   "r2_buckets": [
