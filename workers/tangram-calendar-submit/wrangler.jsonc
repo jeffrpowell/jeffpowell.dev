@@ -7,6 +7,12 @@
 		"ip": "0.0.0.0" // Required to enable accessing the dev server from outside the devcontainer.
 	},
   "main": "src/worker.js",
+  "rules": [
+    {
+      "type": "ESModule",
+      "globs": ["../date-util/**/*.js"]
+    }
+  ],
   "routes": [
     {
       "pattern": "tangram-calendar-submit.jeffpowell.dev/*",
