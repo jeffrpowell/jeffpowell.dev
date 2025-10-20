@@ -15,6 +15,9 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [8976],
 
+	// Load environment variables from .env file
+	"runArgs": ["--env-file", "${localWorkspaceFolder}/.env"],
+
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "pnpm install",
 

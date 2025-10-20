@@ -54,6 +54,10 @@ Until https://github.com/cloudflare/workers-sdk/issues/10603 and/or https://gith
 4. Open your modified link in your browser
 5. Click the `Allow` button
 
+ALTERNATIVELY
+
+Follow the instructions in `.env.example` to supply Wrangler with an API token from your account. This will make it so that you do not need to do the manual login step.
+
 ## 🔧 Development
 
 ### Working with Workers

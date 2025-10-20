@@ -63,3 +63,7 @@ Thumbs.db
 # Cloudflare Workers
 .wrangler
 workers/*/.dev.vars*
+
+# Environment variables
+.env
+.env.local
