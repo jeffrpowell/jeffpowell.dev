@@ -1,3 +1,5 @@
+import { getDateString } from '../../date-util/index.js';
+
 export default {
   async fetch(request, env) {
     console.log(request);
@@ -23,20 +25,4 @@ export default {
       return new Response(e.stack, { status: 500 })
     }
   }
-}
-
-async function getDateString(fullPath) {
-  let date = new Date();
-  const pathTokens = fullPath.split("/");
-  if (pathTokens.length > 2) {
-    const dateCandidate = new Date(pathTokens[2]);
-    if (await isValidDate(dateCandidate)) {
-      date = dateCandidate;
-    }
-  }
-  return date.toISOString().substring(0, 10);
-}
-
-async function isValidDate(d) {
-  return d instanceof Date && !isNaN(d);
 }

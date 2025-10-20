@@ -1,3 +1,5 @@
+import { getDateString } from '../../date-util/index.js';
+
 export default {
   /*expecting the following pathnames
   
@@ -55,22 +57,6 @@ async function getContent(kv, date, cacheKey) {
     await cache.put(cacheKey, response.clone());
   }
   return response;
-}
-
-async function getDateString(fullPath) {
-  let date = new Date();
-  const pathTokens = fullPath.split("/");
-  if (pathTokens.length > 2) {
-    const dateCandidate = new Date(pathTokens[2]);
-    if (await isValidDate(dateCandidate)) {
-      date = dateCandidate;
-    }
-  }
-  return date.toISOString().substring(0, 10);
-}
-
-async function isValidDate(d) {
-  return d instanceof Date && !isNaN(d);
 }
 
 //https://stackoverflow.com/a/69685872
