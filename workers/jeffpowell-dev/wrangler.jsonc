@@ -6,7 +6,7 @@
 	"dev": {
 		"ip": "0.0.0.0" // Required to enable accessing the dev server from outside the devcontainer.
 	},
-	"main": "worker-src/index.js",
+	"main": "worker-src/index.ts",
 	"routes": [
 		{
 			"pattern": "jeffpowell.dev/*",

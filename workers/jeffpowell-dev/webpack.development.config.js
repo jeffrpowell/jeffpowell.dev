@@ -5,7 +5,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   mode: 'development',
   entry: {
-    'index': './src/index.js'
+    'index': './src/index.ts'
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.jsx', '.js']
   },
   output: {
     filename: '[name].js',
@@ -14,6 +17,11 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: 'ts-loader'
+      },
       {
         test: /\.css$/,
         exclude: /node_modules/,
