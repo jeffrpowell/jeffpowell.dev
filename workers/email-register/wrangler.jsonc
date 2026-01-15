@@ -1,0 +1,23 @@
+{
+  "name": "email-register",
+  "workers_dev": false,
+  "preview_urls": false,
+  "compatibility_date": "2026-01-15",
+  "dev": {
+    "ip": "0.0.0.0"
+  },
+  "main": "src/worker.js",
+  "assets": {
+    "directory": "./static",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "kv_namespaces": [
+    {
+      "id": "ac11074f2fa5402ca92a8fb9144b2181",
+      "binding": "KV_EMAIL",
+      "remote": true
+    }
+  ]
+}

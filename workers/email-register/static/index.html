@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Alias Registration</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>📧 Email Alias Registration</h1>
+    <p class="subtitle">Register new email aliases for @jeffpowell.dev</p>
+    
+    <form id="registerForm">
+      <div class="form-group">
+        <label for="prefix">Email Prefix</label>
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            id="prefix" 
+            name="prefix" 
+            class="with-suffix"
+            placeholder="myalias" 
+            required
+            autocomplete="off"
+            pattern="[a-z0-9._-]+"
+            title="Use only lowercase letters, numbers, dots, hyphens, and underscores"
+          >
+          <span class="suffix">@jeffpowell.dev</span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="target">Target Address</label>
+        <input 
+          type="text" 
+          id="target" 
+          name="target" 
+          value="DEFAULT" 
+          placeholder="DEFAULT"
+          required
+        >
+      </div>
+      
+      <button type="submit" id="submitBtn">Register Alias</button>
+    </form>
+    
+    <div id="message" class="message"></div>
+    
+    <div class="note">
+      <strong>Note:</strong> If the alias already exists, you'll receive an error. 
+      The DEFAULT target routes to your primary email address based on health status.
+    </div>
+  </div>
+
+  <script src="/script.js"></script>
+</body>
+</html>
