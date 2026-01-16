@@ -9,6 +9,7 @@ This is a monorepo containing Cloudflare workers for Jeff Powell's projects.
 ├── .devcontainer/                  # Dev environment config and setup
 └── workers/
     ├── jeffpowell-dev/             # Personal portfolio website worker
+    ├── email-register/             # Email alias registration worker
     ├── email-triage/               # Email routing logic worker
     ├── tangram-calendar/           # Supplies hints and solutions for tangram puzzle
     └── tangram-calendar-submit/    # Submit tangram puzzle hints and solutions
@@ -25,6 +26,9 @@ This is a monorepo containing Cloudflare workers for Jeff Powell's projects.
 
 - Docker
 - VS Code with the Dev Containers extension
+
+### Fork in the road
+If you choose the devcontainer route, you need to follow the alternative login workaround method described later on and provide a .env file. Otherwise the devcontainer will fail to load due to the --env-file call expecting that file to be there.
 
 ### Build and local deployment
 
