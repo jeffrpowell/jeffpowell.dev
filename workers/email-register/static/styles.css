@@ -47,12 +47,6 @@ label {
   font-size: 14px;
 }
 
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
 input[type="text"] {
   flex: 1;
   padding: 12px;
@@ -65,18 +59,6 @@ input[type="text"] {
 input[type="text"]:focus {
   outline: none;
   border-color: #667eea;
-}
-
-.suffix {
-  position: absolute;
-  right: 12px;
-  color: #999;
-  pointer-events: none;
-  font-size: 16px;
-}
-
-input[type="text"].with-suffix {
-  padding-right: 150px;
 }
 
 button {
