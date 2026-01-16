@@ -10,7 +10,7 @@ prefixInput.addEventListener('input', (e) => {
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   
-  const prefix = document.getElementById('prefix').value.trim().toLowerCase();
+  const prefix = document.getElementById('prefix').value.trim().toLowerCase().replace('@jeffpowell.dev', '');
   const target = document.getElementById('target').value.trim();
   
   submitBtn.disabled = true;
