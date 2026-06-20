@@ -1,0 +1,49 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "jeffpowell.dev devcontainer (claude)",
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+	"workspaceFolder": "/workspace",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:24-bookworm",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+		"ghcr.io/devcontainers-extra/features/pnpm:2": {}
+	},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [8976],
+
+	// Load environment variables from .env file
+	"runArgs": ["--env-file", "${localWorkspaceFolder}/.env"],
+
+	// Bind the host's local CA certificate into the container so it can be trusted.
+	"mounts": [
+		"source=/usr/local/share/ca-certificates/CWA-ROOT-CA1.crt,target=/usr/local/share/ca-certificates/CWA-ROOT-CA1.crt,type=bind,consistency=cached"
+	],
+
+	// Point Node at the local CA cert so TLS calls (npm/pnpm, fetch, Claude) trust it.
+	"containerEnv": {
+		"NODE_EXTRA_CA_CERTS": "/usr/local/share/ca-certificates/CWA-ROOT-CA1.crt"
+	},
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// Register the bind-mounted CA cert in the system trust store, then install deps.
+	"postCreateCommand": "sudo update-ca-certificates && pnpm install",
+
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"anthropic.claude-code",
+				"pflannery.vscode-versionlens",
+				"bradlc.vscode-tailwindcss",
+				"jacano.vscode-pnpm"
+			]
+		}
+	}
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
