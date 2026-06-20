@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Capture Log</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>📥 Email Capture Log</h1>
+    <p class="subtitle">Audit emails captured by email-triage and download the raw message stored in R2.</p>
+
+    <form id="filterForm" class="filters">
+      <div class="form-group">
+        <label for="sender">From contains</label>
+        <input type="text" id="sender" name="sender" placeholder="alice@example.com" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="recipient">To contains</label>
+        <input type="text" id="recipient" name="recipient" placeholder="me@jeffpowell.dev" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" name="status">
+          <option value="">Any</option>
+          <option value="FIRST">First</option>
+          <option value="RETRY">Retry</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="limit">Limit</label>
+        <input type="number" id="limit" name="limit" value="100" min="1" max="1000">
+      </div>
+      <button type="submit" id="refreshBtn">Refresh</button>
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <div id="status-line" class="status-line"></div>
+
+    <div class="table-wrap">
+      <table id="emailTable">
+        <thead>
+          <tr>
+            <th>Logged</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Routed to</th>
+            <th>Status</th>
+            <th>Content</th>
+          </tr>
+        </thead>
+        <tbody id="emailBody">
+          <tr><td colspan="6" class="empty">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <strong>Note:</strong> Metadata comes from the <code>email_events</code> Analytics Engine
+      dataset (typically retained ~90 days). Downloads stream the archived <code>.eml</code> from
+      the <code>email-backup</code> R2 bucket. Retries are deduplicated, so only the first attempt
+      stores content — a missing download means the message predates archival or has been purged.
+    </div>
+  </div>
+
+  <script src="/script.js"></script>
+</body>
+</html>

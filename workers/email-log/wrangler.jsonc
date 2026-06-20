@@ -1,0 +1,43 @@
+{
+  "name": "email-log",
+  "workers_dev": false,
+  "preview_urls": false,
+  "compatibility_date": "2026-01-15",
+  "dev": {
+    "ip": "0.0.0.0" // Required to enable accessing the dev server from outside the devcontainer.
+  },
+  "main": "src/worker.js",
+  "observability": {
+    "enabled": false,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true
+    }
+  },
+  "assets": {
+    "directory": "./static",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    // Analytics Engine dataset that email-triage writes its events to. Must match
+    // the `dataset` value in workers/email-triage/wrangler.jsonc.
+    "ANALYTICS_DATASET": "email_events"
+    // CF_ACCOUNT_ID is read from a secret/.dev.vars (see README). The Analytics
+    // Engine SQL API is account-scoped and requires the account id at request time.
+  },
+  // Same bucket email-triage archives raw .eml messages to. Read-only here.
+  "r2_buckets": [
+    {
+      "binding": "R2_BUCKET",
+      "bucket_name": "email-backup",
+      "remote": true
+    }
+  ]
+  // Secrets (set via `wrangler secret put` or local `.dev.vars`):
+  //   CF_ACCOUNT_ID  — Cloudflare account id that owns the Analytics Engine dataset
+  //   CF_API_TOKEN   — API token with "Account Analytics: Read" permission, used to
+  //                    query the Analytics Engine SQL API
+}

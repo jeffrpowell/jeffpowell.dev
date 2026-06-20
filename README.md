@@ -11,6 +11,7 @@ This is a monorepo containing Cloudflare workers for Jeff Powell's projects.
     ├── jeffpowell-dev/             # Personal portfolio website worker
     ├── email-register/             # Email alias registration worker
     ├── email-triage/               # Email routing logic worker
+    ├── email-log/                  # Audit log + R2 download for captured emails
     ├── tangram-calendar/           # Supplies hints and solutions for tangram puzzle
     └── tangram-calendar-submit/    # Submit tangram puzzle hints and solutions
 ```

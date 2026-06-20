@@ -1,0 +1,14 @@
+{
+  "name": "@jeffpowell/email-log",
+  "description": "Audit log + R2 download interface for emails captured by the email-triage worker",
+  "version": "1.0.0",
+  "author": "Jeff Powell",
+  "license": "MIT",
+  "packageManager": "pnpm@10.18.3",
+  "scripts": {
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
