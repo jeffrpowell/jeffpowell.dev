@@ -59,12 +59,12 @@ function renderEmails(emails, empty) {
   emailBody.innerHTML = '';
   for (const email of emails) {
     const tr = document.createElement('tr');
-    tr.appendChild(textCell(formatTime(email.eventTime)));
-    tr.appendChild(textCell(email.sender || '—'));
-    tr.appendChild(textCell(email.recipient || '—'));
-    tr.appendChild(textCell(email.destination || '—'));
-    tr.appendChild(statusCell(email.status));
     tr.appendChild(downloadCell(email.key));
+    tr.appendChild(statusCell(email.status));
+    tr.appendChild(textCell(formatTime(email.eventTime)));
+    tr.appendChild(textCell(email.recipient || '—'));
+    tr.appendChild(textCell(email.sender || '—'));
+    tr.appendChild(textCell(email.destination || '—'));
     emailBody.appendChild(tr);
   }
 }
