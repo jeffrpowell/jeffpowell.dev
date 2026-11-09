@@ -45,8 +45,7 @@ async function handleListEmails(url, env) {
   const recipient = (url.searchParams.get('recipient') || '').trim();
   const status = (url.searchParams.get('status') || '').trim().toUpperCase();
 
-  // Filter on double1 (ms epoch from email-triage), not the auto `timestamp`
-  // column, which the SQL API can't resolve for this dataset (422 -> swallowed as empty).
+  // Filter on double1, the ms epoch email-triage writes via Date.now().
   const windowStartMs = Date.now() - 90 * 24 * 60 * 60 * 1000; // match your retention window
   const where = [`double1 > ${windowStartMs}`];
   if (sender) where.push(`blob3 LIKE '%${escapeSql(sender)}%'`);
@@ -56,9 +55,10 @@ async function handleListEmails(url, env) {
   }
   const whereClause = `WHERE ${where.join(' AND ')}`;
 
-  // Order by double1 — the millisecond timestamp email-triage writes via
-  // Date.now(). The auto `timestamp` column can't be resolved by the SQL API for
-  // this dataset, so we rely on the value we control instead.
+  // ORDER BY must use the alias (event_time_ms), not double1: once a column is
+  // aliased in SELECT, the SQL API can't resolve its original name in ORDER BY
+  // and returns 422 "unable to find type of column", which the handler below
+  // would swallow as an empty result. (WHERE can still use the raw name.)
   const sql = `
     SELECT
       blob1 AS r2_key,
@@ -69,7 +69,7 @@ async function handleListEmails(url, env) {
       double1 AS event_time_ms
     FROM ${dataset}
     ${whereClause}
-    ORDER BY double1 DESC
+    ORDER BY event_time_ms DESC
     LIMIT ${limit}
   `.trim();
 
@@ -88,19 +88,14 @@ async function handleListEmails(url, env) {
     );
 
     if (!resp.ok) {
-      const detail = await resp.text();
+      const detail = (await resp.text()).trim();
 
-      // Analytics Engine can't infer column types until the dataset has data, so
-      // it returns 422 "unable to find type of column: ..." for any referenced
-      // column when no events exist in the queried window. Treat that as an empty
-      // log rather than a hard error.
-      if (resp.status === 422 && /unable to find type of column/i.test(detail)) {
-        return jsonResponse({ count: 0, limit, emails: [], empty: true });
-      }
-
+      // Surface every failure, including 422 "unable to find type of column",
+      // which is usually a query bug (e.g. ORDER BY an aliased column's raw name),
+      // not an empty dataset. Swallowing it previously hid such bugs as "0 emails".
       console.error('Analytics Engine query failed:', resp.status, detail);
       return jsonResponse(
-        { error: `Analytics Engine query failed (${resp.status}).` },
+        { error: `Analytics Engine query failed (${resp.status}): ${detail.slice(0, 300)}` },
         502
       );
     }
