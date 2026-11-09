@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "author": "Jeff Powell",
   "license": "MIT",
-  "packageManager": "pnpm@10.18.3",
+  "packageManager": "pnpm@12.18.0",
   "scripts": {
     "dev": "wrangler dev"
   },
   "devDependencies": {
-    "wrangler": "^4.0.0"
+    "wrangler": "^4.158.0"
   }
 }

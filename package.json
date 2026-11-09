@@ -4,13 +4,13 @@
   "version": "1.0.0",
   "author": "Jeff Powell",
   "license": "MIT",
-  "packageManager": "pnpm@11.14.0",
+  "packageManager": "pnpm@12.18.0",
   "private": true,
   "scripts": {
     "build": "pnpm -r run build",
     "build-prod": "pnpm -r run build-prod"
   },
   "devDependencies": {
-    "wrangler": "^4.112.0"
+    "wrangler": "^4.158.0"
   }
 }

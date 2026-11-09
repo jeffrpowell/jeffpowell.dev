@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "Jeff Powell",
   "license": "MIT",
-  "packageManager": "pnpm@10.18.3",
+  "packageManager": "pnpm@12.18.0",
   "scripts": {
     "build": "webpack --mode=development --config webpack.development.config.js",
     "build-watch": "webpack --mode=development --config webpack.development.config.js --watch",
@@ -12,23 +12,24 @@
     "dev": "pnpm build && wrangler dev"
   },
   "dependencies": {
-    "d3": "7.2.1",
-    "htmx.org": "2.0.6"
+    "d3": "7.9.2",
+    "htmx.org": "2.0.11"
   },
   "devDependencies": {
-    "@tailwindcss/forms": "^0.5.7",
-    "@tailwindcss/postcss": "^4.1.11",
-    "copy-webpack-plugin": "^12.0.2",
-    "css-loader": "^7.1.2",
-    "css-minimizer-webpack-plugin": "^7.0.0",
-    "mini-css-extract-plugin": "^2.9.0",
-    "postcss": "^8.4.39",
-    "postcss-loader": "^8.1.1",
-    "tailwindcss": "^4.1.11",
-    "terser-webpack-plugin": "^5.3.10",
-    "webpack": "^5.94.0",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.2",
-    "wrangler": "^4.0.0"
+    "@tailwindcss/forms": "^0.5.11",
+    "@tailwindcss/postcss": "^4.3.5",
+    "copy-webpack-plugin": "^14.0.0",
+    "css-loader": "^7.1.5",
+    "css-minimizer-webpack-plugin": "^8.0.0",
+    "mini-css-extract-plugin": "^2.10.2",
+    "postcss": "^8.5.32",
+    "postcss-loader": "^8.2.1",
+    "tailwindcss": "^4.3.5",
+    "terser-webpack-plugin": "^5.6.1",
+    "webpack": "^5.112.2",
+    "webpack-cli": "^7.3.1",
+    "webpack-dev-server": "^6.1.0",
+    "webpack-merge": "^6.0.1",
+    "wrangler": "^4.158.0"
   }
 }
