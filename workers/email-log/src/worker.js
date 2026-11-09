@@ -45,7 +45,10 @@ async function handleListEmails(url, env) {
   const recipient = (url.searchParams.get('recipient') || '').trim();
   const status = (url.searchParams.get('status') || '').trim().toUpperCase();
 
-  const where = [`timestamp > NOW() - INTERVAL '90' DAY`]; // match your retention window
+  // Filter on double1 (ms epoch from email-triage), not the auto `timestamp`
+  // column, which the SQL API can't resolve for this dataset (422 -> swallowed as empty).
+  const windowStartMs = Date.now() - 90 * 24 * 60 * 60 * 1000; // match your retention window
+  const where = [`double1 > ${windowStartMs}`];
   if (sender) where.push(`blob3 LIKE '%${escapeSql(sender)}%'`);
   if (recipient) where.push(`blob2 LIKE '%${escapeSql(recipient)}%'`);
   if (status === 'FIRST' || status === 'RETRY') {
