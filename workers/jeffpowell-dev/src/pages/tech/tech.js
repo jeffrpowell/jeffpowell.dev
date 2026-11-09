@@ -1,6 +1,9 @@
 // Tech page functionality
 import './tech.css'
 import * as d3 from 'd3';
+// d3 is marked sideEffects:false, so webpack skips its d3-transition re-export;
+// import it directly so selection.prototype.transition gets patched.
+import 'd3-transition';
 import { PageInterface } from '../page';
 
 // Define the tech data structure
