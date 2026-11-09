@@ -20,7 +20,10 @@ export default {
  * Query the Analytics Engine SQL API for the events email-triage logged.
  *
  * email-triage writes each event as:
- *   blobs:   [key, to, from, destination, status]   (status = "FIRST" | "RETRY")
+ *   blobs:   [key, to, from, destination, status, outcome, error]
+ *            status  = "FIRST" | "RETRY"
+ *            outcome = "FORWARDED" | "REJECTED" | "FAILED" (empty on rows logged before this field existed)
+ *            error   = error message when outcome is "FAILED", else empty
  *   doubles: [Date.now()]
  * Analytics Engine also stamps an automatic `timestamp` column at ingestion.
  */

@@ -32,34 +32,46 @@ export default {
     const fromSanitized = from.replace(/[^a-zA-Z0-9._\-]/g, '_');
     const key = `${datePrefix}/${fromSanitized}/${dedupKey}.eml`;
 
-    // Log to Analytics Engine
-    await env.ANALYTICS_EMAIL.writeDataPoint({
-      blobs: [key, to, from, destination, isDuplicate ? "RETRY" : "FIRST"],
-      doubles: [Date.now()]
-    });
-
     // Mark as processed in KV with TTL to prevent memory bloat (only on first attempt)
     // 2-week TTL
     if (!isDuplicate) {
       await env.KV_DEDUP.put(dedupKey, key, { expirationTtl: 1209600 });
     }
 
-    // Forward or reject
-    if (destination === "DROP") {
-      console.log({ result: "DROP", to });
-      await message.setReject(`${to} is not allowed`);
-    } else {
-      // Store raw email in R2 only on first attempt
-      if (!isDuplicate) {
-        const rawEmailStream = message.raw;
-        const rawEmailBuffer = await streamToArrayBuffer(rawEmailStream);
-        
-        await env.R2_BUCKET.put(key, rawEmailBuffer, {
-          httpMetadata: { contentType: "message/rfc822" }
-        });
+    // Forward or reject, recording the outcome so the log reflects delivery, not just receipt
+    let outcome;
+    let errorDetail = "";
+    try {
+      if (destination === "DROP") {
+        console.log({ result: "DROP", to });
+        outcome = "REJECTED";
+        await message.setReject(`${to} is not allowed`);
+      } else {
+        // Store raw email in R2 only on first attempt
+        if (!isDuplicate) {
+          const rawEmailStream = message.raw;
+          const rawEmailBuffer = await streamToArrayBuffer(rawEmailStream);
+
+          await env.R2_BUCKET.put(key, rawEmailBuffer, {
+            httpMetadata: { contentType: "message/rfc822" }
+          });
+        }
+        console.log({ result: "FORWARD", to: to, target: destination, duplicate: isDuplicate });
+        await message.forward(destination);
+        outcome = "FORWARDED";
       }
-      console.log({ result: "FORWARD", to: to, target: destination, duplicate: isDuplicate });
-      await message.forward(destination);
+    } catch (error) {
+      outcome = "FAILED";
+      errorDetail = String(error?.message ?? error).slice(0, 1000);
+      console.error({ result: "FAILED", to, target: destination, error: errorDetail });
+      // Rethrow so the sending server still gets a rejection/bounce as before
+      throw error;
+    } finally {
+      // Log to Analytics Engine
+      env.ANALYTICS_EMAIL.writeDataPoint({
+        blobs: [key, to, from, destination, isDuplicate ? "RETRY" : "FIRST", outcome, errorDetail],
+        doubles: [Date.now()]
+      });
     }
   },
 
