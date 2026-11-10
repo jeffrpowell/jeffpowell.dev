@@ -296,3 +296,21 @@ td.subject-cell {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.remote-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  background: #fff3cd;
+  color: #856404;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.remote-bar button {
+  padding: 6px 14px;
+  font-size: 13px;
+}

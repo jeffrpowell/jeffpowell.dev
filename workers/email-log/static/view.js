@@ -9,6 +9,10 @@ const attachmentList = document.getElementById('attachmentList');
 const bodyWrap = document.getElementById('bodyWrap');
 const htmlBody = document.getElementById('htmlBody');
 const textBody = document.getElementById('textBody');
+const remoteBar = document.getElementById('remoteBar');
+const loadRemoteBtn = document.getElementById('loadRemoteBtn');
+
+let emailHtml = null;
 
 async function loadEmail() {
   if (!key) {
@@ -48,9 +52,15 @@ function render(email) {
 
   bodyWrap.hidden = false;
   if (email.html) {
+    emailHtml = email.html;
     htmlBody.hidden = false;
     htmlBody.addEventListener('load', resizeIframe);
-    htmlBody.srcdoc = withViewerDefaults(email.html);
+    remoteBar.hidden = !hasRemoteContent(emailHtml);
+    loadRemoteBtn.addEventListener('click', () => {
+      remoteBar.hidden = true;
+      htmlBody.srcdoc = withViewerDefaults(emailHtml, true);
+    }, { once: true });
+    htmlBody.srcdoc = withViewerDefaults(emailHtml, false);
   } else {
     textBody.hidden = false;
     textBody.textContent = email.text || '(this message has no body)';
@@ -87,19 +97,42 @@ function renderAttachments(attachments) {
   }
 }
 
-// Inject viewer defaults at the very top of the email's <head>:
+// Content-Security-Policy for the email document. Inline styles and data: URIs
+// (including inlined cid: images) always work; remote images, stylesheets and fonts
+// are blocked until the user opts in, so opening an email doesn't trigger tracking
+// pixels. Scripts are already blocked by the iframe sandbox.
+const CSP_BLOCKED = "default-src 'none'; img-src data:; style-src 'unsafe-inline'; font-src data:";
+const CSP_REMOTE = "default-src 'none'; img-src data: http: https:; style-src 'unsafe-inline' http: https:; font-src data: http: https:";
+
+// Inject viewer defaults ahead of all of the email's own markup:
+// - the CSP above (it must come before anything it governs)
+// - no Referer on image loads or link clicks, so neither this viewer's hostname
+//   nor its URL leaks to senders or linked sites
 // - links open in a new tab instead of navigating the iframe
 // - a sans-serif base font; it comes before the email's own styles, so emails that
 //   set their own font still win.
-function withViewerDefaults(html) {
-  const base = '<base target="_blank">' +
+// They are inserted right after the doctype (or at the very start), where the HTML
+// parser always places <meta>/<base>/<style> into <head>. Matching the email's own
+// <head> tag instead is fragile (e.g. a regex can match <header>), and a CSP <meta>
+// that ends up in <body> is ignored.
+function withViewerDefaults(html, allowRemote) {
+  const defaults =
+    `<meta http-equiv="Content-Security-Policy" content="${allowRemote ? CSP_REMOTE : CSP_BLOCKED}">` +
+    '<meta name="referrer" content="no-referrer">' +
+    '<base target="_blank">' +
     '<style>body { font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif; }</style>';
-  const headMatch = html.match(/<head[^>]*>/i);
-  if (headMatch) {
-    const at = headMatch.index + headMatch[0].length;
-    return html.slice(0, at) + base + html.slice(at);
-  }
-  return base + html;
+  const doctype = html.match(/^\s*(?:<!--[\s\S]*?-->\s*)*<!doctype[^>]*>/i);
+  const at = doctype ? doctype[0].length : 0;
+  return html.slice(0, at) + defaults + html.slice(at);
+}
+
+// Best-effort check for anything the blocking CSP would stop, so the
+// "Load remote images" bar only shows when it would make a difference.
+function hasRemoteContent(html) {
+  return /\b(?:src|srcset|background|poster)\s*=\s*["']?\s*(?:https?:)?\/\//i.test(html) ||
+    /url\(\s*["']?\s*(?:https?:)?\/\//i.test(html) ||
+    /@import/i.test(html) ||
+    /<link\b[^>]*\bhref\s*=\s*["']?\s*(?:https?:)?\/\//i.test(html);
 }
 
 function resizeIframe() {
