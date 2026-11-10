@@ -44,22 +44,23 @@
         <thead>
           <tr>
             <th>Content</th>
-            <th>Status</th>
             <th>Logged</th>
             <th>To</th>
             <th>From</th>
+            <th>Subject</th>
+            <th>Status</th>
             <th>Routed to</th>
           </tr>
         </thead>
         <tbody id="emailBody">
-          <tr><td colspan="6" class="empty">Loading…</td></tr>
+          <tr><td colspan="7" class="empty">Loading…</td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="note">
       <strong>Note:</strong> Metadata comes from the <code>email_events</code> Analytics Engine
-      dataset (typically retained ~90 days). Downloads stream the archived <code>.eml</code> from
+      dataset (typically retained ~90 days). View and download both read the archived <code>.eml</code> from
       the <code>email-backup</code> R2 bucket. Retries are deduplicated, so only the first attempt
       stores content — a missing download means the message predates archival or has been purged.
     </div>

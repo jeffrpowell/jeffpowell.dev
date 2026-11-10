@@ -9,13 +9,16 @@ For every message it processes, `email-triage` writes an event to the
 `.eml` in the `email-backup` R2 bucket. This worker reads both back:
 
 - **Metadata** is queried from Analytics Engine via the SQL API.
-- **Content** is streamed from R2 as a downloadable `.eml`.
+- **Content** is streamed from R2 as a downloadable `.eml`, or parsed with
+  [postal-mime](https://github.com/postalsys/postal-mime) for in-browser viewing.
 
 ## Features
 
-- Browse captured email metadata: from / to / routed-destination / first-vs-retry / time
+- Browse captured email metadata: from / to / subject / routed-destination / first-vs-retry / time
 - Filter by sender, recipient, and status; cap the result count
 - Download the raw `.eml` stored in R2 for any logged email
+- View a parsed email in the browser (`/view?key=…`): headers, HTML body in a
+  script-free sandboxed iframe (plain-text fallback), and downloadable attachments
 - **Should be protected via Cloudflare Zero Trust** — it exposes message metadata
   and content, so put it behind Access on its subdomain like `email-register`.
 
@@ -81,16 +84,35 @@ Returns logged email metadata, newest first.
       "sender": "alice@example.com",
       "destination": "primary@example.com",
       "status": "FIRST",
+      "subject": "Hello 👋",
       "eventTime": 1718841600000
     }
   ]
 }
 ```
 
+`subject` comes from `blob8`, the raw `Subject` header written by email-triage, with
+RFC 2047 encoded-words decoded here. It is an empty string for rows logged before
+email-triage started recording it.
+
 ### `GET /api/download?key=<r2-key>`
 Streams the raw `.eml` from R2 as an attachment. `key` is the `key` field from
 `/api/emails`. Returns `404` if the content is no longer in R2 (e.g. a retry that
 was deduplicated, or a purged object).
+
+### `GET /view?key=<r2-key>`
+Static viewer page (`static/view.html`) that renders the result of `/api/view`.
+
+### `GET /api/view?key=<r2-key>`
+Parses the archived `.eml` and returns `subject`, `date`, `messageId`, `from` / `to` /
+`cc` / `replyTo` (arrays of display strings), `html`, `text`, and `attachments`
+(`index`, `filename`, `mimeType`, `size`, `inline`). Inline `cid:` images are
+embedded in `html` as `data:` URIs. Returns `422` if the message can't be parsed.
+
+### `GET /api/attachment?key=<r2-key>&index=<n>`
+Streams one attachment (by its `index` from `/api/view`) as a download. Always served
+with `Content-Disposition: attachment` and `nosniff` so attached HTML can't render on
+this origin.
 
 ## License
 

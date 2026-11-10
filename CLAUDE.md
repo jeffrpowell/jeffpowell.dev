@@ -29,11 +29,12 @@ There is no test runner or linter configured in this repo.
 ## Worker architecture
 
 Two worker shapes are used:
-- **HTTP workers** export `default { async fetch(request, env, ctx) }` — `jeffpowell-dev`, `tangram-calendar`, `tangram-calendar-submit`, `email-register`.
+- **HTTP workers** export `default { async fetch(request, env, ctx) }` — `jeffpowell-dev`, `tangram-calendar`, `tangram-calendar-submit`, `email-register`, `email-log`.
 - **Email worker** — `email-triage` exports `default { async email(message, env, ctx) }`, an Email Routing handler (no HTTP entry point). It decides the destination (primary vs. backup based on a `PRIMARY_STATUS` health flag in KV), deduplicates retries via `KV_DEDUP` (2-week TTL), archives raw messages to the `email-backup` R2 bucket, and logs to an Analytics Engine dataset.
 
 ### Shared resources couple the workers
 - `KV_EMAIL` (same namespace id) is **written** by `email-register` (alias → target) and **read** by `email-triage` for routing. A `target` of `"DEFAULT"` means "route to primary/backup per health status."
+- `email-log` is a read-only viewer over `email-triage`'s output: it queries the `email_events` Analytics Engine dataset via the SQL API (no read binding exists, so it needs `CF_ACCOUNT_ID`/`CF_API_TOKEN` secrets) and reads `.eml` objects from the `email-backup` R2 bucket. The data point layout is positional — `blobs: [key, to, from, destination, status, outcome, error, subject]`, `doubles: [Date.now()]` — so changing the `blobs` order in `email-triage` silently shifts columns in `email-log`'s SQL. Only append new blobs.
 - `KV_HINTS` / `KV_SOLUTIONS` are shared by `tangram-calendar` (read/serve) and `tangram-calendar-submit` (write). Keyed by ISO date (`YYYY-MM-DD`).
 - Changing a binding id/name in one worker's `wrangler.jsonc` can silently break the other worker that shares it.
 
@@ -41,7 +42,7 @@ Two worker shapes are used:
 `workers/date-util/index.js` has **no `package.json`** and is not an npm dependency. Workers that use it import it by relative path (`../../date-util/index.js`) and declare it in `wrangler.jsonc` via a `rules` ESModule glob so Wrangler bundles it. Replicate both the import and the rule when adding a new consumer.
 
 ### Static asset serving pattern
-Workers that own a domain serve static files from R2 (not Workers Assets) with edge caching: `assets.run_worker_first` routes a path prefix (`/assets/*`) through the worker first, which checks `caches.default`, falls back to an R2 `.get()`, sets `Cache-Control`/`etag`, and writes back to cache via `ctx.waitUntil`. See `workers/jeffpowell-dev/worker-src/index.js`. `email-register` instead uses `assets.binding` (`env.ASSETS.fetch`) with SPA fallback and `run_worker_first: ["/api/*"]`.
+Workers that own a domain serve static files from R2 (not Workers Assets) with edge caching: `assets.run_worker_first` routes a path prefix (`/assets/*`) through the worker first, which checks `caches.default`, falls back to an R2 `.get()`, sets `Cache-Control`/`etag`, and writes back to cache via `ctx.waitUntil`. See `workers/jeffpowell-dev/worker-src/index.js`. `email-register` and `email-log` instead use `assets.binding` (`env.ASSETS.fetch`) with SPA fallback and `run_worker_first: ["/api/*"]`.
 
 ## `jeffpowell-dev` frontend
 

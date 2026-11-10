@@ -24,7 +24,7 @@ async function loadEmails() {
   refreshBtn.disabled = true;
   refreshBtn.textContent = 'Loading…';
   messageEl.classList.remove('show', 'error');
-  emailBody.innerHTML = '<tr><td colspan="6" class="empty">Loading…</td></tr>';
+  emailBody.innerHTML = '<tr><td colspan="7" class="empty">Loading…</td></tr>';
 
   try {
     const response = await fetch(`/api/emails?${params.toString()}`);
@@ -39,7 +39,7 @@ async function loadEmails() {
       ? 'No email events have been logged yet.'
       : `Showing ${data.count} event${data.count === 1 ? '' : 's'} (limit ${data.limit}).`;
   } catch (error) {
-    emailBody.innerHTML = '<tr><td colspan="6" class="empty">No data.</td></tr>';
+    emailBody.innerHTML = '<tr><td colspan="7" class="empty">No data.</td></tr>';
     statusLine.textContent = '';
     messageEl.textContent = error.message || 'Network error. Please try again.';
     messageEl.classList.add('show', 'error');
@@ -52,7 +52,7 @@ async function loadEmails() {
 function renderEmails(emails, empty) {
   if (!emails || emails.length === 0) {
     const msg = empty ? 'No emails have been logged yet.' : 'No matching emails.';
-    emailBody.innerHTML = `<tr><td colspan="6" class="empty">${msg}</td></tr>`;
+    emailBody.innerHTML = `<tr><td colspan="7" class="empty">${msg}</td></tr>`;
     return;
   }
 
@@ -60,10 +60,11 @@ function renderEmails(emails, empty) {
   for (const email of emails) {
     const tr = document.createElement('tr');
     tr.appendChild(downloadCell(email.key));
-    tr.appendChild(statusCell(email.status));
     tr.appendChild(textCell(formatTime(email.eventTime)));
     tr.appendChild(textCell(email.recipient || '—'));
     tr.appendChild(textCell(email.sender || '—'));
+    tr.appendChild(subjectCell(email.subject));
+    tr.appendChild(statusCell(email.status));
     tr.appendChild(textCell(email.destination || '—'));
     emailBody.appendChild(tr);
   }
@@ -72,6 +73,13 @@ function renderEmails(emails, empty) {
 function textCell(text) {
   const td = document.createElement('td');
   td.textContent = text;
+  return td;
+}
+
+function subjectCell(subject) {
+  const td = textCell(subject || '—');
+  td.className = 'subject-cell';
+  if (subject) td.title = subject;
   return td;
 }
 
@@ -90,12 +98,25 @@ function downloadCell(key) {
     td.textContent = '—';
     return td;
   }
+  const wrap = document.createElement('div');
+  wrap.className = 'cell-links';
+
+  const view = document.createElement('a');
+  view.className = 'download-link';
+  view.href = `/view?key=${encodeURIComponent(key)}`;
+  view.target = '_blank';
+  view.rel = 'noopener';
+  view.textContent = '👁 View';
+  view.title = key;
+
   const link = document.createElement('a');
   link.className = 'download-link';
   link.href = `/api/download?key=${encodeURIComponent(key)}`;
   link.textContent = '⬇ .eml';
   link.title = key;
-  td.appendChild(link);
+
+  wrap.append(view, link);
+  td.appendChild(wrap);
   return td;
 }
 

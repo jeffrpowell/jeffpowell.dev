@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Viewer</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="viewer-nav">
+      <a href="/" class="download-link">← Back to log</a>
+      <a id="downloadLink" class="download-link" href="#" hidden>⬇ Download .eml</a>
+    </div>
+
+    <h1 id="subject">Loading…</h1>
+
+    <div id="message" class="message"></div>
+
+    <dl id="emailHeaders" class="email-headers"></dl>
+
+    <div id="attachmentsSection" class="attachments" hidden>
+      <h2>Attachments</h2>
+      <ul id="attachmentList"></ul>
+    </div>
+
+    <div id="bodyWrap" class="email-body-wrap" hidden>
+      <!--
+        Email HTML is untrusted. The sandbox omits allow-scripts, so nothing in the
+        message can execute; allow-same-origin is only there so this page can read the
+        rendered height. Links open in a new tab via allow-popups.
+      -->
+      <iframe id="htmlBody" class="email-html" title="Email body"
+              sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox" hidden></iframe>
+      <pre id="textBody" class="email-text" hidden></pre>
+    </div>
+  </div>
+
+  <script src="/view.js"></script>
+</body>
+</html>

@@ -1,6 +1,9 @@
 export default {
   async email(message, env, ctx) {
     const { to, from } = message;
+    // Raw Subject header (RFC 2047 encoded-words are left as-is; email-log decodes them
+    // for display). Capped so the Analytics Engine data point stays well under its blob limit.
+    const subject = (message.headers.get("Subject") || "").slice(0, 1000);
     let route = await env.KV_EMAIL.get(to) || await env.CATCH_ALL_ADDRESS;
 
     // Check primary health status
@@ -69,7 +72,7 @@ export default {
     } finally {
       // Log to Analytics Engine
       env.ANALYTICS_EMAIL.writeDataPoint({
-        blobs: [key, to, from, destination, isDuplicate ? "RETRY" : "FIRST", outcome, errorDetail],
+        blobs: [key, to, from, destination, isDuplicate ? "RETRY" : "FIRST", outcome, errorDetail, subject],
         doubles: [Date.now()]
       });
     }
